@@ -99,7 +99,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, compare
           {/* Right Action - CET Portal Tag */}
           <div className="flex items-center gap-3 shrink-0">
             <a
-              href="https://fe2025.mahacet.org"
+              href="https://cetcell.mahacet.org"
               target="_blank"
               rel="noopener noreferrer"
               className="hidden lg:flex items-center gap-2 bg-slate-900 text-white text-xs font-medium px-4 py-2 rounded-full shadow-[0_2px_6px_rgba(0,0,0,0.12)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.2)] hover:bg-slate-800 transition-all duration-150"
