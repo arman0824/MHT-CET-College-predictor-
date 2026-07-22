@@ -1,5 +1,5 @@
 import React from 'react';
-import { School, GitCompare, Target, TrendingUp, ShieldCheck, ExternalLink } from 'lucide-react';
+import { School, GitCompare, Target, TrendingUp, ShieldCheck, ExternalLink, Download } from 'lucide-react';
 
 type FooterTab = 'explore' | 'predictor' | 'compare' | 'trends';
 
@@ -107,21 +107,21 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab }) => {
           <div className="space-y-4">
             <h4 className="font-bold text-white text-sm uppercase tracking-wider">Quick Links</h4>
             <nav className="space-y-2.5">
-              <a href="https://fe2025.mahacet.org" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors">
+              <a href="https://cetcell.mahacet.org" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors">
                 <ExternalLink className="w-3.5 h-3.5 flex-shrink-0" />
                 <span>Official CET Cell Portal</span>
               </a>
-              <a href="https://cetcell.mahacet.org" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors">
+              <a href="https://fe2026.mahacet.org/StaticPages/HomePage" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors">
                 <ExternalLink className="w-3.5 h-3.5 flex-shrink-0" />
-                <span>CAP Admission Schedule</span>
+                <span>Merit List 2026</span>
               </a>
-              <a href="https://cetcell.mahacet.org/pdf/InformationBrochure.pdf" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors">
-                <ExternalLink className="w-3.5 h-3.5 flex-shrink-0" />
+              <a 
+                href="/CAP-round-2025.pdf" 
+                download="MHT-CET-CAP-ROUND-2025.pdf"
+                className="flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors"
+              >
+                <Download className="w-3.5 h-3.5 flex-shrink-0" />
                 <span>Information Brochure PDF</span>
-              </a>
-              <a href="#" className="flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors">
-                <ExternalLink className="w-3.5 h-3.5 flex-shrink-0" />
-                <span>Document Verification Centers</span>
               </a>
             </nav>
           </div>
