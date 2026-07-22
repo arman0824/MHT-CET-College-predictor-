@@ -1,7 +1,18 @@
 import React from 'react';
 import { School, GitCompare, Target, TrendingUp, ShieldCheck, ExternalLink } from 'lucide-react';
 
-export const Footer: React.FC = () => {
+type FooterTab = 'explore' | 'predictor' | 'compare' | 'trends';
+
+interface FooterProps {
+  setActiveTab: (tab: FooterTab) => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ setActiveTab }) => {
+
+  const goTo = (tab: FooterTab) => {
+    setActiveTab(tab);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <footer className="bg-slate-900 text-slate-300 pt-12 pb-6 mt-auto">
@@ -13,15 +24,13 @@ export const Footer: React.FC = () => {
           {/* Brand Column */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-2xl bg-slate-700 flex items-center justify-center border border-slate-600">
-                <School className="w-6 h-6 text-google-blue-400" />
+              <div className="w-11 h-11 rounded-2xl bg-white border border-slate-200 shadow-[0_2px_6px_rgba(0,0,0,0.15)] flex items-center justify-center">
+                <School className="w-6 h-6 text-google-blue-500" />
               </div>
               <div>
                 <div className="flex items-center gap-1 font-bold text-white text-lg tracking-tight">
-                  <span>MHT-CET</span>
-                  <span className="text-google-blue-400 font-extrabold">Cutoff</span>
-                  <span className="text-google-red-400 font-extrabold">Hub</span>
-                  <span className="inline-block w-2 h-2 rounded-full bg-google-green-400 ml-0.5"></span>
+                  <span>CET</span>
+                  <span className="text-google-blue-400 font-extrabold">Vault</span>
                 </div>
                 <p className="text-xs text-slate-400 font-medium">Official CAP Cutoffs & Admission Predictor</p>
               </div>
@@ -48,34 +57,34 @@ export const Footer: React.FC = () => {
           <div className="space-y-4">
             <h4 className="font-bold text-white text-sm uppercase tracking-wider">Explore Tools</h4>
             <nav className="space-y-2.5">
-              <a 
-                href="#explore" 
+              <button
+                onClick={() => goTo('explore')}
                 className="flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors"
               >
                 <School className="w-3.5 h-3.5 text-google-blue-400 flex-shrink-0" />
                 <span>Explore 370+ Colleges</span>
-              </a>
-              <a 
-                href="#predictor" 
+              </button>
+              <button
+                onClick={() => goTo('predictor')}
                 className="flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors"
               >
                 <Target className="w-3.5 h-3.5 text-google-green-400 flex-shrink-0" />
-                <span>Admission Predictor AI</span>
-              </a>
-              <a 
-                href="#compare" 
+                <span>College Predictor</span>
+              </button>
+              <button
+                onClick={() => goTo('compare')}
                 className="flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors"
               >
                 <GitCompare className="w-3.5 h-3.5 text-google-yellow-400 flex-shrink-0" />
                 <span>Side-by-Side Compare</span>
-              </a>
-              <a 
-                href="#trends" 
+              </button>
+              <button
+                onClick={() => goTo('trends')}
                 className="flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors"
               >
                 <TrendingUp className="w-3.5 h-3.5 text-google-red-400 flex-shrink-0" />
                 <span>2025 vs 2024 Trends</span>
-              </a>
+              </button>
             </nav>
           </div>
 
@@ -124,7 +133,7 @@ export const Footer: React.FC = () => {
           
           {/* Copyright */}
           <div className="text-xs text-slate-500 font-medium">
-            &copy; {new Date().getFullYear()} MHT-CET Cutoff Hub. Built with React + Tailwind CSS. 
+            &copy; {new Date().getFullYear()} CET Vault. 
             <span className="mx-2">·</span>
             Not affiliated with State CET Cell, Maharashtra. For reference only.
           </div>

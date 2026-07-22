@@ -77,7 +77,7 @@ export function App() {
       </main>
 
       {/* Footer */}
-      <Footer />
+      <Footer setActiveTab={setActiveTab} />
 
     </div>
   );
