@@ -2,7 +2,7 @@
 
 An all-in-one web application for MHT-CET engineering aspirants in Maharashtra to explore official CAP round cutoffs, predict eligible colleges based on percentile, compare branches side-by-side, and build preference option forms.
 
-🚀 **Live Demo:** [https://cet-vault.vercel.app](https://cet-vault.vercel.app)
+🚀 **Live:** [https://cet-vault.vercel.app](https://cet-vault.vercel.app)
 
 ---
 
