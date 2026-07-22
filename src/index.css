@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme {
+  --color-google-blue-50: #e8f0fe;
+  --color-google-blue-100: #d2e3fc;
+  --color-google-blue-500: #1a73e8;
+  --color-google-blue-600: #1557b0;
+  --color-google-blue-700: #174ea6;
+  --color-google-green-50: #e6f4ea;
+  --color-google-green-100: #ceead6;
+  --color-google-green-500: #34a853;
+  --color-google-green-600: #137333;
+  --color-google-yellow-50: #fef7e0;
+  --color-google-yellow-100: #feefc3;
+  --color-google-yellow-500: #fbbc05;
+  --color-google-yellow-600: #b06000;
+  --color-google-red-50: #fce8e6;
+  --color-google-red-100: #fad2cf;
+  --color-google-red-500: #ea4335;
+  --color-google-red-600: #c5221f;
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-800 transition-colors duration-200 antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+/* Custom elevations and active states to represent Google's Material depth design */
+.google-btn-primary {
+  @apply bg-google-blue-500 text-white font-medium px-5 py-2.5 rounded-full 
+         shadow-[0_2px_4px_rgba(26,115,232,0.15)] 
+         hover:shadow-[0_4px_12px_rgba(26,115,232,0.3)] 
+         hover:bg-google-blue-600 hover:-translate-y-[1px]
+         active:shadow-[0_1px_2px_rgba(26,115,232,0.15)] 
+         active:translate-y-[1px] active:bg-google-blue-700
+         transition-all duration-150 flex items-center justify-center gap-2;
+}
+
+.google-btn-secondary {
+  @apply bg-white text-google-blue-500 font-medium px-5 py-2.5 rounded-full border border-slate-200
+         shadow-[0_1px_3px_rgba(0,0,0,0.05)] 
+         hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] 
+         hover:border-slate-300 hover:bg-slate-50 hover:-translate-y-[1px]
+         active:shadow-[0_1px_2px_rgba(0,0,0,0.05)] 
+         active:translate-y-[1px] active:bg-slate-100
+         transition-all duration-150 flex items-center justify-center gap-2;
+}
+
+.google-card {
+  @apply bg-white rounded-2xl border border-slate-100 p-6
+         shadow-[0_4px_12px_rgba(0,0,0,0.03)] 
+         hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] hover:-translate-y-[2px]
+         transition-all duration-200;
+}
+
+/* Custom classes for custom layout scrollbar hiding */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
