@@ -91,12 +91,6 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
             </span>
           </div>
         </div>
-
-        <div className="text-right max-w-[140px] shrink-0">
-          <span className="text-[10px] leading-tight text-slate-500 font-semibold block">
-            Check official website for latest fees
-          </span>
-        </div>
       </div>
 
       {/* Action Buttons Row with Google Elevations */}
