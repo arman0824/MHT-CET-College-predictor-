@@ -314,7 +314,7 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
 
                     <div className="text-xs text-slate-500 flex items-center gap-3">
                       <span>Status: <strong className="text-slate-700">{item.college.status}</strong></span>
-                      <span>Annual Fees: <strong className="text-slate-700">₹{item.college.fees.toLocaleString()}</strong></span>
+                      <span>Fees: <strong className="text-slate-700">Check college website</strong></span>
                     </div>
                   </div>
 

@@ -146,8 +146,8 @@ export const CollegeCompare: React.FC<CollegeCompareProps> = ({
             <tr>
               <td className="p-4 font-bold text-slate-900 bg-slate-50/50">Annual Fees</td>
               {comparedColleges.map((col) => (
-                <td key={col.code} className="p-4 border-l border-slate-200 font-extrabold text-slate-900 text-sm">
-                  ₹{col.fees.toLocaleString()}/yr
+                <td key={col.code} className="p-4 border-l border-slate-200 font-semibold text-slate-500 text-xs leading-normal">
+                  Check website for latest fees
                 </td>
               ))}
             </tr>

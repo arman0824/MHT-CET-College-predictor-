@@ -19,7 +19,7 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
   const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
   const [selectedBranch, setSelectedBranch] = useState<string>('ALL');
   const [selectedCategory, setSelectedCategory] = useState<string>('GOPENH');
-  const [sortBy, setSortBy] = useState<'percentile_desc' | 'percentile_asc' | 'name' | 'rating' | 'fees'>('percentile_desc');
+  const [sortBy, setSortBy] = useState<'percentile_desc' | 'percentile_asc' | 'name' | 'rating'>('percentile_desc');
   const [minPercentile, setMinPercentile] = useState<number>(0);
 
   // Region options
@@ -114,7 +114,6 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
       if (sortBy === 'percentile_asc') return aCutoff - bCutoff;
       if (sortBy === 'name') return a.name.localeCompare(b.name);
       if (sortBy === 'rating') return b.rating - a.rating;
-      if (sortBy === 'fees') return a.fees - b.fees;
       return 0;
     });
   }, [colleges, searchTerm, selectedRegion, selectedStatus, selectedBranch, selectedCategory, sortBy, minPercentile]);
@@ -129,7 +128,7 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
             Explore <span className="text-google-blue-500">Maharashtra</span> Engineering Cutoffs
           </h1>
           <p className="text-sm text-slate-500 mt-2">
-            Search 105+ CAP engineering colleges across Mumbai, Pune, Nagpur, Nashik & all districts. Filter by MHT-CET score & category.
+            Search 370+ CAP engineering colleges across Mumbai, Pune, Nagpur, Nashik & all districts. Filter by MHT-CET score & category.
           </p>
         </div>
 
@@ -266,7 +265,6 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
               <option value="percentile_desc">Cutoff: High to Low</option>
               <option value="percentile_asc">Cutoff: Low to High</option>
               <option value="rating">Rating: High to Low</option>
-              <option value="fees">Fees: Low to High</option>
               <option value="name">College Name (A-Z)</option>
             </select>
           </div>

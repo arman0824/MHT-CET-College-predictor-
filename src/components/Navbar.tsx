@@ -30,7 +30,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, compare
               </div>
               <p className="text-xs text-slate-500 font-medium flex items-center gap-1">
                 <ShieldCheck className="w-3 h-3 text-google-green-600 inline" />
-                Official CAP Cutoffs • 105+ Maharashtra Colleges
+                Official CAP Cutoffs • 370+ Maharashtra Colleges
               </p>
             </div>
           </div>

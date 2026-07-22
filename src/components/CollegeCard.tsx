@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { College } from '../data/colleges';
-import { MapPin, Building, Star, IndianRupee, ExternalLink, ChevronDown, ChevronUp, Plus, Check, Award, Flame } from 'lucide-react';
+import { MapPin, Building, Star, ExternalLink, ChevronDown, ChevronUp, Plus, Check, Award, Flame } from 'lucide-react';
 
 interface CollegeCardProps {
   college: College;
@@ -92,11 +92,9 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
           </div>
         </div>
 
-        <div className="text-right">
-          <span className="text-[11px] text-slate-400 block font-medium">Annual Fees</span>
-          <span className="text-sm font-bold text-slate-700 flex items-center justify-end gap-0.5">
-            <IndianRupee className="w-3.5 h-3.5" />
-            {college.fees.toLocaleString()}/yr
+        <div className="text-right max-w-[140px] shrink-0">
+          <span className="text-[10px] leading-tight text-slate-500 font-semibold block">
+            Check official website for latest fees
           </span>
         </div>
       </div>

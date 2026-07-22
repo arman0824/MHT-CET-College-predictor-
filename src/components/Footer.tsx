@@ -28,7 +28,7 @@ export const Footer: React.FC = () => {
             </div>
 
             <p className="text-xs text-slate-400 leading-relaxed max-w-xs">
-              India's most comprehensive MHT-CET engineering cutoff tracker. Real-time data for 105+ Maharashtra colleges across Mumbai, Pune, Nagpur, Nashik, and all major regions.
+              India's most comprehensive MHT-CET engineering cutoff tracker. Real-time data for 370+ Maharashtra colleges across Mumbai, Pune, Nagpur, Nashik, and all major regions.
             </p>
 
             <div className="flex items-center gap-1 text-xs text-slate-500">
@@ -53,7 +53,7 @@ export const Footer: React.FC = () => {
                 className="flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors"
               >
                 <School className="w-3.5 h-3.5 text-google-blue-400 flex-shrink-0" />
-                <span>Explore 105+ Colleges</span>
+                <span>Explore 370+ Colleges</span>
               </a>
               <a 
                 href="#predictor" 
