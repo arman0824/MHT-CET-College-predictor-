@@ -21,5 +21,5 @@ An all-in-one web application for MHT-CET engineering aspirants in Maharashtra t
 - **Icons:** Lucide React
 - **Data Pipeline:** Python (`pdfplumber`) & Node.js for parsing and structuring raw CAP PDFs into JSON.
 - **Deployment:** Vercel
-- 
+
 ---
