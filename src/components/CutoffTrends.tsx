@@ -138,7 +138,7 @@ export const CutoffTrends: React.FC<CutoffTrendsProps> = ({ colleges }) => {
               How many CAP rounds are conducted by CET Cell Maharashtra?
             </h4>
             <p>
-              The DTE CET Cell typically conducts 3 Centralized Admission Process (CAP) rounds followed by ACAP (Against CAP) / Institutional Spot Round seats directly at college campuses.
+              The DTE CET Cell typically conducts 4 Centralized Admission Process (CAP) rounds followed by ACAP (Against CAP) / Institutional Spot Round seats directly at college campuses.
             </p>
           </div>
 
