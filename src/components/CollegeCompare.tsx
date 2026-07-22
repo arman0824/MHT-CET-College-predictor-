@@ -1,6 +1,6 @@
 import React from 'react';
 import type { College } from '../data/colleges';
-import { GitCompare, X, Star, ExternalLink, MapPin, Trash2 } from 'lucide-react';
+import { GitCompare, X, Star, MapPin, Trash2 } from 'lucide-react';
 
 interface CollegeCompareProps {
   comparedColleges: College[];
