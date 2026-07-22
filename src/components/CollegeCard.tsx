@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { College } from '../data/colleges';
-import { MapPin, Building, Star, ExternalLink, ChevronDown, ChevronUp, Plus, Check, Award, Flame } from 'lucide-react';
+import { MapPin, Building, Star, ChevronDown, ChevronUp, Plus, Check, Award, Flame } from 'lucide-react';
 
 interface CollegeCardProps {
   college: College;
