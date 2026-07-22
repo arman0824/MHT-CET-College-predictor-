@@ -1,32 +1,25 @@
-# React + TypeScript + Vite
+# 🎓 MHT-CET Cutoff & College Predictor
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+An all-in-one web application for MHT-CET engineering aspirants in Maharashtra to explore official CAP round cutoffs, predict eligible colleges based on percentile, compare branches side-by-side, and build preference option forms.
 
-Currently, two official plugins are available:
+🚀 **Live Demo:** [https://cet-vault.vercel.app](https://cet-vault.vercel.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 🎯 **Smart College Predictor:** Recommends safe, competitive, and target colleges based on your MHT-CET percentile and reservation category.
+- 📊 **Official CAP Cutoffs:** Complete, accurate category-wise cutoff data (GOPENS, EWS, TFWS, OBC, SC, ST, etc.) extracted directly from official CET Cell PDFs.
+- 🔍 **Advanced Filtering:** Search and filter 370+ engineering colleges by city/region, branch, autonomous status, or percentile range.
+- ⚖️ **Side-by-Side Comparison:** Compare up to 3 colleges side-by-side to evaluate options before filling preference lists.
 
-## Expanding the Oxlint configuration
+---
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## 🛠️ Tech Stack
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+- **Frontend:** React, TypeScript, Vite, Tailwind CSS
+- **Icons:** Lucide React
+- **Data Pipeline:** Python (`pdfplumber`) & Node.js for parsing and structuring raw CAP PDFs into JSON.
+- **Deployment:** Vercel
+- 
+---
