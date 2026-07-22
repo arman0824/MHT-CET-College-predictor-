@@ -208,23 +208,6 @@ export const CollegeCompare: React.FC<CollegeCompareProps> = ({
               })}
             </tr>
 
-            {/* Official Portal Link */}
-            <tr>
-              <td className="p-4 font-bold text-slate-900 bg-slate-50/50">Official Website</td>
-              {comparedColleges.map((col) => (
-                <td key={col.code} className="p-4 border-l border-slate-200">
-                  <a
-                    href={col.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-google-blue-600 hover:underline font-bold inline-flex items-center gap-1"
-                  >
-                    Visit Portal <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                </td>
-              ))}
-            </tr>
-
           </tbody>
         </table>
       </div>
