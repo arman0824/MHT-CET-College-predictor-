@@ -147,14 +147,7 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
               </h4>
             </div>
 
-            <a
-              href={college.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs font-medium text-google-blue-600 hover:underline flex items-center gap-1"
-            >
-              Official Site <ExternalLink className="w-3 h-3" />
-            </a>
+            
           </div>
 
           {/* Branch Filter Pills */}
