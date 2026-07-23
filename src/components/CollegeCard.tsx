@@ -18,12 +18,20 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
   const [expanded, setExpanded] = useState(false);
   const [activeBranchFilter, setActiveBranchFilter] = useState<string>('ALL');
 
-  const csBranch = college.branches.find(b => b.name.includes("Computer") || b.name.includes("CSE")) || college.branches[0];
-  const topCutoff2025 = csBranch?.cutoffs2025[selectedCategory] || csBranch?.cutoffs2025['GOPENH'];
+  // Find top branch that has exact data for selectedCategory
+  const csBranch = college.branches.find(
+    b => (b.name.includes("Computer") || b.name.includes("CSE")) && b.cutoffs2025?.[selectedCategory]
+  ) || college.branches.find(
+    b => b.cutoffs2025?.[selectedCategory]
+  ) || college.branches[0];
 
+  const topCutoff2025 = csBranch?.cutoffs2025?.[selectedCategory];
+
+  // Only display branches that have exact data for selectedCategory
+  const availableBranches = college.branches.filter(b => b.cutoffs2025?.[selectedCategory]);
   const displayedBranches = activeBranchFilter === 'ALL'
-    ? college.branches
-    : college.branches.filter(b => b.name.toLowerCase().includes(activeBranchFilter.toLowerCase()));
+    ? availableBranches
+    : availableBranches.filter(b => b.name.toLowerCase().includes(activeBranchFilter.toLowerCase()));
 
   return (
     <div className="google-card group relative bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 p-4 sm:p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.08)] hover:border-slate-300 transition-all duration-200">
@@ -77,12 +85,18 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
             </span>
           </div>
           <div className="flex items-baseline gap-2 mt-1 flex-wrap">
-            <span className="text-2xl font-black text-slate-900 tracking-tight">
-              {topCutoff2025?.percentile.toFixed(2)}%ile
-            </span>
-            <span className="text-xs font-semibold text-slate-500">
-              (Rank ~#{topCutoff2025?.rank.toLocaleString()})
-            </span>
+            {topCutoff2025 ? (
+              <>
+                <span className="text-2xl font-black text-slate-900 tracking-tight">
+                  {topCutoff2025.percentile.toFixed(2)}%ile
+                </span>
+                <span className="text-xs font-semibold text-slate-500">
+                  (Rank ~#{topCutoff2025.rank.toLocaleString()})
+                </span>
+              </>
+            ) : (
+              <span className="text-sm font-bold text-slate-400">No cutoff data available</span>
+            )}
           </div>
         </div>
       </div>
@@ -114,7 +128,7 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
           onClick={() => setExpanded(!expanded)}
           className="flex-1 google-btn-primary text-sm py-3 sm:py-2.5 px-4"
         >
-          <span>{expanded ? 'Hide Details' : `Cutoffs (${college.branches.length} Branches)`}</span>
+          <span>{expanded ? 'Hide Details' : `Cutoffs (${availableBranches.length} Branches)`}</span>
           {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
         </button>
       </div>
@@ -151,9 +165,8 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
           <div className="sm:hidden space-y-2">
             {displayedBranches.length > 0 ? (
               displayedBranches.map((br) => {
-                const c2025 = br.cutoffs2025[selectedCategory] || br.cutoffs2025['GOPENH'];
-                //const c2024 = br.cutoffs2024[selectedCategory] || br.cutoffs2024['GOPENH'];
-                //const diff = c2025.percentile - c2024.percentile;
+                const c2025 = br.cutoffs2025[selectedCategory];
+                if (!c2025) return null;
                 return (
                   <div key={br.code} className="bg-slate-50/70 border border-slate-200 rounded-xl p-3">
                     <div className="flex items-start justify-between gap-2">
@@ -167,7 +180,6 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
                       </div>
                     </div>
                     <div className="mt-2 grid grid-cols-3 gap-2 text-xs">
-                      
                       <div className="bg-white rounded-lg border border-slate-200 px-2 py-1.5">
                         <div className="text-[10px] text-slate-400 font-bold uppercase">Rank</div>
                         <div className="font-mono font-semibold text-slate-700">#{c2025.rank.toLocaleString()}</div>
@@ -182,7 +194,7 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
               })
             ) : (
               <div className="p-4 text-center text-sm text-slate-400 italic">
-                No branches found matching "{activeBranchFilter}".
+                No branches found with cutoff data for "{selectedCategory}" matching "{activeBranchFilter}".
               </div>
             )}
           </div>
@@ -201,9 +213,8 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
               <tbody className="divide-y divide-slate-200/80 bg-white">
                 {displayedBranches.length > 0 ? (
                   displayedBranches.map((br) => {
-                    const c2025 = br.cutoffs2025[selectedCategory] || br.cutoffs2025['GOPENH'];
-                    //const c2024 = br.cutoffs2024[selectedCategory] || br.cutoffs2024['GOPENH'];
-                    //const diff = c2025.percentile - c2024.percentile;
+                    const c2025 = br.cutoffs2025[selectedCategory];
+                    if (!c2025) return null;
 
                     return (
                       <tr key={br.code} className="hover:bg-slate-50 transition-colors">
@@ -217,7 +228,6 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
                         <td className="p-3 text-center font-mono text-slate-600">
                           #{c2025.rank.toLocaleString()}
                         </td>
-                        
                         <td className="p-3 text-center text-slate-600">
                           {br.intake} seats
                         </td>
@@ -226,8 +236,8 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
                   })
                 ) : (
                   <tr>
-                    <td colSpan={5} className="p-4 text-center text-slate-400 italic">
-                      No branches found matching "{activeBranchFilter}".
+                    <td colSpan={4} className="p-4 text-center text-slate-400 italic">
+                      No branches found with cutoff data for "{selectedCategory}" matching "{activeBranchFilter}".
                     </td>
                   </tr>
                 )}

@@ -11,6 +11,78 @@ interface CollegeExplorerProps {
   onToggleCompare: (college: College) => void;
 }
 
+const CATEGORY_LABELS: Record<string, string> = {
+  GOPENH: 'GOPENH (General Open Home Univ)',
+  GOPENO: 'GOPENO (General Open Other Univ)',
+  GOPENS: 'GOPENS (General Open State Level)',
+  LOPENH: 'LOPENH (Ladies Open Home Univ)',
+  LOPENO: 'LOPENO (Ladies Open Other Univ)',
+  LOPENS: 'LOPENS (Ladies Open State Level)',
+  OBC: 'OBC (Other Backward Class)',
+  GOBCH: 'GOBCH (General OBC Home Univ)',
+  GOBCO: 'GOBCO (General OBC Other Univ)',
+  GOBCS: 'GOBCS (General OBC State Level)',
+  LOBCH: 'LOBCH (Ladies OBC Home Univ)',
+  LOBCO: 'LOBCO (Ladies OBC Other Univ)',
+  LOBCS: 'LOBCS (Ladies OBC State Level)',
+  SC: 'SC (Scheduled Caste)',
+  GSCH: 'GSCH (General SC Home Univ)',
+  GSCO: 'GSCO (General SC Other Univ)',
+  GSCS: 'GSCS (General SC State Level)',
+  LSCH: 'LSCH (Ladies SC Home Univ)',
+  LSCO: 'LSCO (Ladies SC Other Univ)',
+  LSCS: 'LSCS (Ladies SC State Level)',
+  ST: 'ST (Scheduled Tribe)',
+  GSTH: 'GSTH (General ST Home Univ)',
+  GSTO: 'GSTO (General ST Other Univ)',
+  GSTS: 'GSTS (General ST State Level)',
+  LSTH: 'LSTH (Ladies ST Home Univ)',
+  LSTO: 'LSTO (Ladies ST Other Univ)',
+  LSTS: 'LSTS (Ladies ST State Level)',
+  EWS: 'EWS (Economically Weaker Section)',
+  TFWS: 'TFWS (Tuition Fee Waiver Scheme)',
+  GSEBCH: 'GSEBCH (General SEBC Home Univ)',
+  GSEBCO: 'GSEBCO (General SEBC Other Univ)',
+  GSEBCS: 'GSEBCS (General SEBC State Level)',
+  LSEBCH: 'LSEBCH (Ladies SEBC Home Univ)',
+  LSEBCO: 'LSEBCO (Ladies SEBC Other Univ)',
+  LSEBCS: 'LSEBCS (Ladies SEBC State Level)',
+  GNT1H: 'GNT1H (General NT-1 Home Univ)',
+  GNT1O: 'GNT1O (General NT-1 Other Univ)',
+  GNT1S: 'GNT1S (General NT-1 State Level)',
+  GNT2H: 'GNT2H (General NT-2 Home Univ)',
+  GNT2O: 'GNT2O (General NT-2 Other Univ)',
+  GNT2S: 'GNT2S (General NT-2 State Level)',
+  GNT3H: 'GNT3H (General NT-3 Home Univ)',
+  GNT3O: 'GNT3O (General NT-3 Other Univ)',
+  GNT3S: 'GNT3S (General NT-3 State Level)',
+  GVJH: 'GVJH (General VJ/DT Home Univ)',
+  GVJO: 'GVJO (General VJ/DT Other Univ)',
+  GVJS: 'GVJS (General VJ/DT State Level)',
+  LNT1H: 'LNT1H (Ladies NT-1 Home Univ)',
+  LNT1O: 'LNT1O (Ladies NT-1 Other Univ)',
+  LNT1S: 'LNT1S (Ladies NT-1 State Level)',
+  LNT2H: 'LNT2H (Ladies NT-2 Home Univ)',
+  LNT2O: 'LNT2O (Ladies NT-2 Other Univ)',
+  LNT2S: 'LNT2S (Ladies NT-2 State Level)',
+  LNT3H: 'LNT3H (Ladies NT-3 Home Univ)',
+  LNT3O: 'LNT3O (Ladies NT-3 Other Univ)',
+  LNT3S: 'LNT3S (Ladies NT-3 State Level)',
+  LVJH: 'LVJH (Ladies VJ/DT Home Univ)',
+  LVJO: 'LVJO (Ladies VJ/DT Other Univ)',
+  LVJS: 'LVJS (Ladies VJ/DT State Level)',
+  MI: 'MI (Minority)',
+  ORPHAN: 'ORPHAN (Orphan)',
+  DEFOPENS: 'DEFOPENS (Defense Open State)',
+  DEFOBCS: 'DEFOBCS (Defense OBC State)',
+  DEFSEBCS: 'DEFSEBCS (Defense SEBC State)',
+  PWDOPENS: 'PWDOPENS (PWD Open State)',
+  PWDOPENH: 'PWDOPENH (PWD Open Home Univ)',
+  PWDOBCS: 'PWDOBCS (PWD OBC State)',
+  PWDOBCH: 'PWDOBCH (PWD OBC Home Univ)',
+  PWDSCS: 'PWDSCS (PWD SC State)'
+};
+
 const REGIONS = [
   { id: 'ALL', label: 'All Regions' },
   { id: 'Mumbai', label: 'Mumbai & Thane' },
@@ -20,17 +92,6 @@ const REGIONS = [
   { id: 'Aurangabad', label: 'Chh. Sambhajinagar' },
   { id: 'Sangli/Kolhapur/Satara', label: 'Sangli/Kolhapur' },
   { id: 'Nanded/Amravati/Jalgaon', label: 'Amravati & Nanded' }
-];
-
-const CATEGORIES = [
-  { id: 'GOPENH', label: 'GOPENH (General Open Home Univ)' },
-  { id: 'GOPENO', label: 'GOPENO (General Open Other Univ)' },
-  { id: 'LOPENH', label: 'LOPENH (Ladies Open Home Univ)' },
-  { id: 'LOPENO', label: 'LOPENO (Ladies Open Other Univ)' },
-  { id: 'OBC', label: 'OBC (Other Backward Class)' },
-  { id: 'SC', label: 'SC (Scheduled Caste)' },
-  { id: 'ST', label: 'ST (Scheduled Tribe)' },
-  { id: 'TFWS', label: 'TFWS (Tuition Fee Waiver Scheme)' }
 ];
 
 const BRANCH_OPTIONS = [
@@ -64,11 +125,61 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
   comparedColleges,
   onToggleCompare
 }) => {
+  // Dynamically extract all reservation categories present across colleges.ts
+  const categories = useMemo(() => {
+    const catSet = new Set<string>();
+    colleges.forEach((college) => {
+      college.branches?.forEach((branch) => {
+        if (branch.cutoffs2025) {
+          Object.keys(branch.cutoffs2025).forEach((cat) => {
+            if (cat) catSet.add(cat);
+          });
+        }
+      });
+    });
+
+    if (catSet.size === 0) {
+      return [{ id: 'GOPENH', label: 'GOPENH (General Open Home Univ)' }];
+    }
+
+    const priorityOrder: Record<string, number> = {
+      GOPENH: 1,
+      GOPENO: 2,
+      GOPENS: 3,
+      LOPENH: 4,
+      LOPENO: 5,
+      OBC: 6,
+      GOBCH: 7,
+      SC: 8,
+      GSCH: 9,
+      ST: 10,
+      GSTH: 11,
+      EWS: 12,
+      TFWS: 13
+    };
+
+    const list = Array.from(catSet).map((id) => ({
+      id,
+      label: CATEGORY_LABELS[id] || `${id} (${id})`
+    }));
+
+    list.sort((a, b) => {
+      const pA = priorityOrder[a.id] ?? 999;
+      const pB = priorityOrder[b.id] ?? 999;
+      if (pA !== pB) return pA - pB;
+      return a.id.localeCompare(b.id);
+    });
+
+    return list;
+  }, [colleges]);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRegion, setSelectedRegion] = useState<string>('ALL');
   const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
   const [selectedBranch, setSelectedBranch] = useState<string>('ALL');
-  const [selectedCategory, setSelectedCategory] = useState<string>('GOPENH');
+  const [selectedCategory, setSelectedCategory] = useState<string>(() => {
+    return categories.some(c => c.id === 'GOPENH') ? 'GOPENH' : (categories[0]?.id || 'GOPENH');
+  });
   const [sortBy, setSortBy] = useState<'percentile_desc' | 'percentile_asc' | 'name' | 'rating'>('percentile_desc');
   const [minPercentile, setMinPercentile] = useState<number>(0);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -78,7 +189,7 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
     setSelectedRegion('ALL');
     setSelectedStatus('ALL');
     setSelectedBranch('ALL');
-    setSelectedCategory('GOPENH');
+    setSelectedCategory(categories.some(c => c.id === 'GOPENH') ? 'GOPENH' : (categories[0]?.id || 'GOPENH'));
     setSortBy('percentile_desc');
     setMinPercentile(0);
   };
@@ -87,12 +198,18 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
     (selectedRegion !== 'ALL' ? 1 : 0) +
     (selectedStatus !== 'ALL' ? 1 : 0) +
     (selectedBranch !== 'ALL' ? 1 : 0) +
-    (selectedCategory !== 'GOPENH' ? 1 : 0) +
+    (selectedCategory !== (categories.some(c => c.id === 'GOPENH') ? 'GOPENH' : (categories[0]?.id || 'GOPENH')) ? 1 : 0) +
     (minPercentile > 0 ? 1 : 0);
 
-  // Filter & Sort Logic
+  // Filter & Sort Logic - strictly requires exact category cutoff data
   const filteredColleges = useMemo(() => {
     return colleges.filter((col) => {
+      // Must have at least one branch with exact category cutoff data
+      const hasCategoryData = col.branches.some(
+        (b) => b.cutoffs2025?.[selectedCategory] && typeof b.cutoffs2025[selectedCategory].percentile === 'number'
+      );
+      if (!hasCategoryData) return false;
+
       const matchesSearch =
         searchTerm.trim() === '' ||
         col.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -111,24 +228,24 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
 
       const matchesBranch =
         selectedBranch === 'ALL' ||
-        col.branches.some(b => b.name.toLowerCase().includes(selectedBranch.toLowerCase()));
+        col.branches.some(b => b.name.toLowerCase().includes(selectedBranch.toLowerCase()) && b.cutoffs2025?.[selectedCategory]);
 
-      const topBranch = col.branches.find(b => b.name.includes("Computer") || b.name.includes("CSE")) || col.branches[0];
-      const p = topBranch?.cutoffs2025[selectedCategory]?.percentile || topBranch?.cutoffs2025['GOPENH']?.percentile || 0;
+      const topBranch = col.branches.find(b => (b.name.includes("Computer") || b.name.includes("CSE")) && b.cutoffs2025?.[selectedCategory]) || col.branches.find(b => b.cutoffs2025?.[selectedCategory]);
+      const p = topBranch?.cutoffs2025?.[selectedCategory]?.percentile || 0;
       const matchesPercentile = p >= minPercentile;
 
       return matchesSearch && matchesRegion && matchesStatus && matchesBranch && matchesPercentile;
-    }).sort((a, b) => {
-      const aTopBranch = a.branches.find(br => br.name.includes("Computer") || br.name.includes("CSE")) || a.branches[0];
-      const bTopBranch = b.branches.find(br => br.name.includes("Computer") || br.name.includes("CSE")) || b.branches[0];
+    }).sort((colA, colB) => {
+      const aTopBranch = colA.branches.find(br => (br.name.includes("Computer") || br.name.includes("CSE")) && br.cutoffs2025?.[selectedCategory]) || colA.branches.find(br => br.cutoffs2025?.[selectedCategory]);
+      const bTopBranch = colB.branches.find(br => (br.name.includes("Computer") || br.name.includes("CSE")) && br.cutoffs2025?.[selectedCategory]) || colB.branches.find(br => br.cutoffs2025?.[selectedCategory]);
 
-      const aCutoff = aTopBranch?.cutoffs2025[selectedCategory]?.percentile || 0;
-      const bCutoff = bTopBranch?.cutoffs2025[selectedCategory]?.percentile || 0;
+      const aCutoff = aTopBranch?.cutoffs2025?.[selectedCategory]?.percentile || 0;
+      const bCutoff = bTopBranch?.cutoffs2025?.[selectedCategory]?.percentile || 0;
 
       if (sortBy === 'percentile_desc') return bCutoff - aCutoff;
       if (sortBy === 'percentile_asc') return aCutoff - bCutoff;
-      if (sortBy === 'name') return a.name.localeCompare(b.name);
-      if (sortBy === 'rating') return b.rating - a.rating;
+      if (sortBy === 'name') return colA.name.localeCompare(colB.name);
+      if (sortBy === 'rating') return colB.rating - colA.rating;
       return 0;
     });
   }, [colleges, searchTerm, selectedRegion, selectedStatus, selectedBranch, selectedCategory, sortBy, minPercentile]);
@@ -136,7 +253,7 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
   const regionLabel = REGIONS.find(r => r.id === selectedRegion)?.label || '';
   const statusLabel = STATUS_OPTIONS.find(s => s.id === selectedStatus)?.label || '';
   const branchLabel = BRANCH_OPTIONS.find(b => b.id === selectedBranch)?.label || '';
-  const categoryLabel = CATEGORIES.find(c => c.id === selectedCategory)?.label?.split(' ')[0] || '';
+  const categoryLabel = categories.find(c => c.id === selectedCategory)?.label?.split(' ')[0] || selectedCategory;
 
   const filterSheet = (
     <div className="space-y-5">
@@ -147,7 +264,7 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
           onChange={(e) => setSelectedCategory(e.target.value)}
           className="touch-target w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm font-semibold rounded-xl px-4 focus:bg-white focus:ring-2 focus:ring-google-blue-500 focus:outline-none"
         >
-          {CATEGORIES.map((cat) => (
+          {categories.map((cat) => (
             <option key={cat.id} value={cat.id}>{cat.label}</option>
           ))}
         </select>
@@ -232,6 +349,8 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
     </div>
   );
 
+  const defaultCatId = categories.some(c => c.id === 'GOPENH') ? 'GOPENH' : (categories[0]?.id || 'GOPENH');
+
   return (
     <div className="space-y-6 sm:space-y-8 py-4 sm:py-6">
 
@@ -242,7 +361,7 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
             Explore <span className="text-google-blue-500">Maharashtra</span> Engineering Cutoffs
           </h1>
           <p className="text-sm text-slate-500 mt-2">
-            Search 370+ CAP engineering colleges across Mumbai, Pune, Nagpur, Nashik & all districts. Filter by MHT-CET score & category.
+            Some Colleges May NOT show-up based on the selected Resevation Category. In the FILTERS tab Make sure it matches your preference.
           </p>
         </div>
 
@@ -319,8 +438,8 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
             {selectedBranch !== 'ALL' ? (
               <Chip color="blue" label={branchLabel} onRemove={() => setSelectedBranch('ALL')} />
             ) : null}
-            {selectedCategory !== 'GOPENH' ? (
-              <Chip color="blue" label={categoryLabel} onRemove={() => setSelectedCategory('GOPENH')} />
+            {selectedCategory !== defaultCatId ? (
+              <Chip color="blue" label={categoryLabel} onRemove={() => setSelectedCategory(defaultCatId)} />
             ) : null}
             {minPercentile > 0 ? (
               <Chip color="blue" label={`${minPercentile}%+`} onRemove={() => setMinPercentile(0)} />
@@ -359,7 +478,7 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl p-2.5 focus:bg-white focus:ring-2 focus:ring-google-blue-500 focus:outline-none"
             >
-              {CATEGORIES.map((cat) => (
+              {categories.map((cat) => (
                 <option key={cat.id} value={cat.id}>{cat.label}</option>
               ))}
             </select>
@@ -455,7 +574,7 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
           </div>
           <h3 className="text-lg font-bold text-slate-800">No Colleges Found</h3>
           <p className="text-sm text-slate-500 mt-2">
-            No engineering colleges matched your search parameters. Try lowering your minimum percentile or selecting "All Regions".
+            No engineering colleges matched your search parameters with cutoff data for <span className="font-bold text-slate-700">{selectedCategory}</span>. Try adjusting your category, minimum percentile, or region filters above.
           </p>
           <button
             onClick={handleResetFilters}

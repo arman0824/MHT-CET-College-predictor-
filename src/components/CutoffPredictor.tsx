@@ -8,16 +8,77 @@ interface CutoffPredictorProps {
   comparedColleges: College[];
 }
 
-const CATEGORIES = [
-  { id: 'GOPENH', label: 'GOPENH (General Open Home Univ)' },
-  { id: 'GOPENO', label: 'GOPENO (General Open Other Univ)' },
-  { id: 'LOPENH', label: 'LOPENH (Ladies Open Home Univ)' },
-  { id: 'LOPENO', label: 'LOPENO (Ladies Open Other Univ)' },
-  { id: 'OBC', label: 'OBC (Other Backward Class)' },
-  { id: 'SC', label: 'SC (Scheduled Caste)' },
-  { id: 'ST', label: 'ST (Scheduled Tribe)' },
-  { id: 'TFWS', label: 'TFWS (Tuition Fee Waiver Scheme)' }
-];
+const CATEGORY_LABELS: Record<string, string> = {
+  GOPENH: 'GOPENH (General Open Home Univ)',
+  GOPENO: 'GOPENO (General Open Other Univ)',
+  GOPENS: 'GOPENS (General Open State Level)',
+  LOPENH: 'LOPENH (Ladies Open Home Univ)',
+  LOPENO: 'LOPENO (Ladies Open Other Univ)',
+  LOPENS: 'LOPENS (Ladies Open State Level)',
+  OBC: 'OBC (Other Backward Class)',
+  GOBCH: 'GOBCH (General OBC Home Univ)',
+  GOBCO: 'GOBCO (General OBC Other Univ)',
+  GOBCS: 'GOBCS (General OBC State Level)',
+  LOBCH: 'LOBCH (Ladies OBC Home Univ)',
+  LOBCO: 'LOBCO (Ladies OBC Other Univ)',
+  LOBCS: 'LOBCS (Ladies OBC State Level)',
+  SC: 'SC (Scheduled Caste)',
+  GSCH: 'GSCH (General SC Home Univ)',
+  GSCO: 'GSCO (General SC Other Univ)',
+  GSCS: 'GSCS (General SC State Level)',
+  LSCH: 'LSCH (Ladies SC Home Univ)',
+  LSCO: 'LSCO (Ladies SC Other Univ)',
+  LSCS: 'LSCS (Ladies SC State Level)',
+  ST: 'ST (Scheduled Tribe)',
+  GSTH: 'GSTH (General ST Home Univ)',
+  GSTO: 'GSTO (General ST Other Univ)',
+  GSTS: 'GSTS (General ST State Level)',
+  LSTH: 'LSTH (Ladies ST Home Univ)',
+  LSTO: 'LSTO (Ladies ST Other Univ)',
+  LSTS: 'LSTS (Ladies ST State Level)',
+  EWS: 'EWS (Economically Weaker Section)',
+  TFWS: 'TFWS (Tuition Fee Waiver Scheme)',
+  GSEBCH: 'GSEBCH (General SEBC Home Univ)',
+  GSEBCO: 'GSEBCO (General SEBC Other Univ)',
+  GSEBCS: 'GSEBCS (General SEBC State Level)',
+  LSEBCH: 'LSEBCH (Ladies SEBC Home Univ)',
+  LSEBCO: 'LSEBCO (Ladies SEBC Other Univ)',
+  LSEBCS: 'LSEBCS (Ladies SEBC State Level)',
+  GNT1H: 'GNT1H (General NT-1 Home Univ)',
+  GNT1O: 'GNT1O (General NT-1 Other Univ)',
+  GNT1S: 'GNT1S (General NT-1 State Level)',
+  GNT2H: 'GNT2H (General NT-2 Home Univ)',
+  GNT2O: 'GNT2O (General NT-2 Other Univ)',
+  GNT2S: 'GNT2S (General NT-2 State Level)',
+  GNT3H: 'GNT3H (General NT-3 Home Univ)',
+  GNT3O: 'GNT3O (General NT-3 Other Univ)',
+  GNT3S: 'GNT3S (General NT-3 State Level)',
+  GVJH: 'GVJH (General VJ/DT Home Univ)',
+  GVJO: 'GVJO (General VJ/DT Other Univ)',
+  GVJS: 'GVJS (General VJ/DT State Level)',
+  LNT1H: 'LNT1H (Ladies NT-1 Home Univ)',
+  LNT1O: 'LNT1O (Ladies NT-1 Other Univ)',
+  LNT1S: 'LNT1S (Ladies NT-1 State Level)',
+  LNT2H: 'LNT2H (Ladies NT-2 Home Univ)',
+  LNT2O: 'LNT2O (Ladies NT-2 Other Univ)',
+  LNT2S: 'LNT2S (Ladies NT-2 State Level)',
+  LNT3H: 'LNT3H (Ladies NT-3 Home Univ)',
+  LNT3O: 'LNT3O (Ladies NT-3 Other Univ)',
+  LNT3S: 'LNT3S (Ladies NT-3 State Level)',
+  LVJH: 'LVJH (Ladies VJ/DT Home Univ)',
+  LVJO: 'LVJO (Ladies VJ/DT Other Univ)',
+  LVJS: 'LVJS (Ladies VJ/DT State Level)',
+  MI: 'MI (Minority)',
+  ORPHAN: 'ORPHAN (Orphan)',
+  DEFOPENS: 'DEFOPENS (Defense Open State)',
+  DEFOBCS: 'DEFOBCS (Defense OBC State)',
+  DEFSEBCS: 'DEFSEBCS (Defense SEBC State)',
+  PWDOPENS: 'PWDOPENS (PWD Open State)',
+  PWDOPENH: 'PWDOPENH (PWD Open Home Univ)',
+  PWDOBCS: 'PWDOBCS (PWD OBC State)',
+  PWDOBCH: 'PWDOBCH (PWD OBC Home Univ)',
+  PWDSCS: 'PWDSCS (PWD SC State)'
+};
 
 const REGIONS = [
   { id: 'ALL', label: 'All Regions (Maharashtra)' },
@@ -84,7 +145,7 @@ const BUCKET_META: Record<Bucket, { label: string; short: string; icon: React.Co
     bgClass: 'bg-amber-50',
     borderClass: 'border-amber-500',
     textClass: 'text-amber-700',
-    description: 'Cutoff within ±1.0% of your score. Competitive for CAP Round 2 & 3.'
+    description: 'Cutoff up to 1.5% above your score. Competitive for CAP Round 2 & 3.'
   },
   dream: {
     label: 'Target / Dream',
@@ -94,7 +155,7 @@ const BUCKET_META: Record<Bucket, { label: string; short: string; icon: React.Co
     bgClass: 'bg-google-blue-50',
     borderClass: 'border-google-blue-500',
     textClass: 'text-google-blue-700',
-    description: 'Cutoff 1.0%–3.5% above your score. Try CAP Round 3 or ACAP spots.'
+    description: 'Cutoff 1.5%–3.5% above your score. Try CAP Round 3 or ACAP spots.'
   }
 };
 
@@ -104,13 +165,72 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
   comparedColleges
 }) => {
   const initial = loadPersisted();
+
+  // Dynamically extract all reservation categories present across colleges.ts
+  const categories = useMemo(() => {
+    const catSet = new Set<string>();
+    colleges.forEach((college) => {
+      college.branches?.forEach((branch) => {
+        if (branch.cutoffs2025) {
+          Object.keys(branch.cutoffs2025).forEach((cat) => {
+            if (cat) catSet.add(cat);
+          });
+        }
+      });
+    });
+
+    if (catSet.size === 0) {
+      return [{ id: 'GOPENH', label: 'GOPENH (General Open Home Univ)' }];
+    }
+
+    const priorityOrder: Record<string, number> = {
+      GOPENH: 1,
+      GOPENO: 2,
+      GOPENS: 3,
+      LOPENH: 4,
+      LOPENO: 5,
+      OBC: 6,
+      GOBCH: 7,
+      SC: 8,
+      GSCH: 9,
+      ST: 10,
+      GSTH: 11,
+      EWS: 12,
+      TFWS: 13
+    };
+
+    const list = Array.from(catSet).map((id) => ({
+      id,
+      label: CATEGORY_LABELS[id] || `${id} (${id})`
+    }));
+
+    list.sort((a, b) => {
+      const pA = priorityOrder[a.id] ?? 999;
+      const pB = priorityOrder[b.id] ?? 999;
+      if (pA !== pB) return pA - pB;
+      return a.id.localeCompare(b.id);
+    });
+
+    return list;
+  }, [colleges]);
+
   // Allowed userPercentile state to be number OR string to permit clear/empty inputs
   const [userPercentile, setUserPercentile] = useState<number | string>(initial?.percentile ?? 95.0);
-  const [userCategory, setUserCategory] = useState<string>(initial?.category ?? 'GOPENH');
+  const [userCategory, setUserCategory] = useState<string>(() => {
+    if (initial?.category) return initial.category;
+    return 'GOPENH';
+  });
   const [selectedRegion, setSelectedRegion] = useState<string>(initial?.region ?? 'ALL');
   const [selectedBranch, setSelectedBranch] = useState<string>(initial?.branch ?? 'ALL');
   const [activeTab, setActiveTab] = useState<Bucket>('safe');
   const [saved, setSaved] = useState<boolean>(!!initial);
+
+  // Keep userCategory synced with available categories if necessary
+  useEffect(() => {
+    if (categories.length > 0 && !categories.some((c) => c.id === userCategory)) {
+      setUserCategory(categories[0].id);
+    }
+  }, [categories, userCategory]);
 
   useEffect(() => {
     setSaved(!!loadPersisted());
@@ -133,9 +253,12 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
     }
   };
 
-  // Calculation Engine
+  // Calculation Engine - Enforces strict category cutoffs without fake fallbacks
   const predictions = useMemo(() => {
-    const p = Number(userPercentile) || 0;
+    const p = typeof userPercentile === 'number' ? userPercentile : parseFloat(String(userPercentile));
+    if (isNaN(p) || p < 0 || !userCategory) {
+      return { safeList: [], moderateList: [], dreamList: [] };
+    }
 
     const safeList: Array<{ college: College; branchName: string; cutoffP: number; rank: number; margin: number }> = [];
     const moderateList: Array<{ college: College; branchName: string; cutoffP: number; rank: number; margin: number }> = [];
@@ -151,24 +274,47 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
           return;
         }
 
-        const cutoffData = branch.cutoffs2025[userCategory] || branch.cutoffs2025['GOPENH'];
-        const cutoffP = cutoffData?.percentile || 99.9;
-        const rank = cutoffData?.rank || 99999;
+        // Strictly evaluate cutoff for selected category.
+        // NO fallback to GOPENH and NO fake 99.9/99999 values!
+        const cutoffData = branch.cutoffs2025?.[userCategory];
+        if (
+          !cutoffData ||
+          typeof cutoffData.percentile !== 'number' ||
+          isNaN(cutoffData.percentile) ||
+          typeof cutoffData.rank !== 'number' ||
+          isNaN(cutoffData.rank)
+        ) {
+          return;
+        }
+
+        const cutoffP = cutoffData.percentile;
+        const rank = cutoffData.rank;
         const margin = p - cutoffP;
 
-        if (margin >= 0.5) {
+        if (margin >= 0) {
           safeList.push({ college, branchName: branch.name, cutoffP, rank, margin });
-        } else if (margin >= -1.2 && margin < 0.5) {
+        } else if (margin >= -1.5 && margin < 0) {
           moderateList.push({ college, branchName: branch.name, cutoffP, rank, margin });
-        } else if (margin >= -3.5 && margin < -1.2) {
+        } else if (margin >= -3.5 && margin < -1.5) {
           dreamList.push({ college, branchName: branch.name, cutoffP, rank, margin });
         }
       });
     });
 
-    safeList.sort((a, b) => Math.abs(a.margin) - Math.abs(b.margin));
-    moderateList.sort((a, b) => Math.abs(a.margin) - Math.abs(b.margin));
-    dreamList.sort((a, b) => Math.abs(a.margin) - Math.abs(b.margin));
+    // Sort within each bucket by closeness to user score (smallest absolute margin first)
+    const sortFn = (
+      a: { margin: number; cutoffP: number; college: College; branchName: string },
+      b: { margin: number; cutoffP: number; college: College; branchName: string }
+    ) => {
+      const absDiff = Math.abs(a.margin) - Math.abs(b.margin);
+      if (Math.abs(absDiff) > 0.0001) return absDiff;
+      if (b.cutoffP !== a.cutoffP) return b.cutoffP - a.cutoffP;
+      return a.college.name.localeCompare(b.college.name);
+    };
+
+    safeList.sort(sortFn);
+    moderateList.sort(sortFn);
+    dreamList.sort(sortFn);
 
     return { safeList, moderateList, dreamList };
   }, [colleges, userPercentile, userCategory, selectedRegion, selectedBranch]);
@@ -205,7 +351,7 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 bg-slate-50 p-4 sm:p-6 rounded-2xl border border-slate-200/60">
 
           <div>
-            <label className="text-sm font-bold text-slate-700 mb-2 block flex items-center gap-1">
+            <label className="text-sm font-bold text-slate-700 mb-2 flex items-center gap-1">
               <Sparkles className="w-3.5 h-3.5 text-google-yellow-500" />
               Your MHT-CET Percentile
             </label>
@@ -239,7 +385,7 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
               onChange={(e) => setUserCategory(e.target.value)}
               className="touch-target w-full bg-white border border-slate-300 text-slate-800 text-sm font-semibold rounded-xl p-3.5 focus:ring-2 focus:ring-google-green-500 focus:outline-none shadow-sm"
             >
-              {CATEGORIES.map((c) => (
+              {categories.map((c) => (
                 <option key={c.id} value={c.id}>{c.label}</option>
               ))}
             </select>
@@ -345,7 +491,7 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
               }`}
             >
               <div className="flex items-center justify-between mb-2">
-                <div className={`flex items-center gap-2 font-bold text-slate-900`}>
+                <div className="flex items-center gap-2 font-bold text-slate-900">
                   <Icon className={`w-5 h-5 ${meta.textClass}`} />
                   <span>{meta.label}</span>
                 </div>
@@ -419,7 +565,7 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
                   {/* Bottom: clear metric row */}
                   <div className="mt-3 grid grid-cols-3 gap-2 sm:gap-3">
                     <div className="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 sm:px-3 sm:py-2.5">
-                      <div className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">Cutoff 2025</div>
+                      <div className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">Cutoff 2025 ({userCategory})</div>
                       <div className="mt-0.5 text-base sm:text-lg font-black text-slate-900">
                         {item.cutoffP.toFixed(2)}<span className="text-xs sm:text-sm font-bold text-slate-500">%ile</span>
                       </div>
@@ -449,7 +595,7 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
           </div>
         ) : (
           <div className="py-10 sm:py-12 text-center text-sm text-slate-400 font-medium">
-            No matching college branches found in this probability bucket. Try adjusting your MHT-CET score or branch preferences above.
+            No matching college branches found with cutoff data for <span className="font-bold text-slate-600">{userCategory}</span> in this probability bucket. Try adjusting your MHT-CET score, category, or branch preferences above.
           </div>
         )}
       </div>
