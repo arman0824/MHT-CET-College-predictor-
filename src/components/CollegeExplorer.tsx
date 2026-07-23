@@ -97,9 +97,6 @@ const BRANCH_OPTIONS = [
 
 const STATUS_OPTIONS = [
   { id: 'ALL', label: 'All College Types' },
-  { id: 'Government', label: 'Government / Govt-Aided' },
-  { id: 'Private', label: 'Private / Un-Aided' },
-  { id: 'Autonomous', label: 'Autonomous Colleges' }
 ];
 
 const SORT_OPTIONS: Array<{ id: 'percentile_desc' | 'percentile_asc' | 'name' | 'rating'; label: string }> = [

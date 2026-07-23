@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { College } from '../data/colleges';
-import { MapPin, Building, Star, ChevronDown, ChevronUp, Plus, Check, Award, Flame } from 'lucide-react';
+import { MapPin, Star, ChevronDown, ChevronUp, Plus, Check, Award, Flame } from 'lucide-react';
 
 interface CollegeCardProps {
   college: College;
@@ -41,15 +41,6 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
         <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
           <span className="inline-flex items-center gap-1 bg-slate-900 text-white font-mono text-xs font-semibold px-2 py-1 rounded-lg shadow-sm">
             DTE: {college.code}
-          </span>
-
-          <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-lg ${
-            college.status.includes('Government')
-              ? 'bg-google-green-50 text-google-green-700 border border-google-green-100'
-              : 'bg-google-blue-50 text-google-blue-700 border border-google-blue-100'
-          }`}>
-            <Building className="w-3 h-3" />
-            {college.status}
           </span>
 
           <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-md">
