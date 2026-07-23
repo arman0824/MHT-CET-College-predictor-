@@ -1,13 +1,12 @@
 import React from 'react';
 import type { College } from '../data/colleges';
-import { TrendingUp, ArrowUpRight, ArrowDownRight, Minus, HelpCircle, Award } from 'lucide-react';
+import { TrendingUp, ArrowUpRight, ArrowDownRight, Minus, HelpCircle, Award, MapPin } from 'lucide-react';
 
 interface CutoffTrendsProps {
   colleges: College[];
 }
 
 export const CutoffTrends: React.FC<CutoffTrendsProps> = ({ colleges }) => {
-  // Top 10 colleges by CS cutoff
   const topColleges = [...colleges]
     .sort((a, b) => {
       const aCut = a.branches.find(br => br.name.includes("Computer"))?.cutoffs2025['GOPENH']?.percentile || 0;
@@ -17,36 +16,75 @@ export const CutoffTrends: React.FC<CutoffTrendsProps> = ({ colleges }) => {
     .slice(0, 10);
 
   return (
-    <div className="space-y-8 py-6">
-      
-      {/* Header Banner */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-12 h-12 rounded-2xl bg-google-red-50 text-google-red-500 flex items-center justify-center border border-google-red-100 shadow-sm">
-            <TrendingUp className="w-6 h-6" />
+    <div className="space-y-6 sm:space-y-8 py-4 sm:py-6">
+
+      <div className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 border border-slate-200/80 shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
+        <div className="flex items-center gap-3">
+          <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-google-red-50 text-google-red-500 flex items-center justify-center border border-google-red-100 shadow-sm shrink-0">
+            <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div>
-            <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-              MHT-CET <span className="text-google-red-500">Cutoff Trends Analysis</span> (2025 vs 2024)
+            <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+              MHT-CET <span className="text-google-red-500">Cutoff Trends</span> (2025 vs 2024)
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 font-medium">
-              Historical MHT-CET score & percentile variations across top engineering colleges in Maharashtra.
+            <p className="text-sm text-slate-500 font-medium">
+              Historical MHT-CET percentile variations across top engineering colleges in Maharashtra.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Top 10 Premier Colleges Trends Table */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-md">
-        
-        <div className="flex items-center gap-2 pb-4 border-b border-slate-100 mb-4">
-          <Award className="w-5 h-5 text-google-yellow-600" />
-          <h2 className="text-lg font-bold text-slate-900">
-            Top 10 Most Competitive Maharashtra Colleges (Computer Engineering Cutoffs)
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 p-4 sm:p-6 shadow-md">
+
+        <div className="flex items-center gap-2 pb-3 sm:pb-4 border-b border-slate-100 mb-3 sm:mb-4">
+          <Award className="w-5 h-5 text-google-yellow-600 shrink-0" />
+          <h2 className="text-base sm:text-lg font-bold text-slate-900 leading-tight">
+            Top 10 Most Competitive Colleges <span className="hidden sm:inline">(Computer Engineering Cutoffs)</span>
+            <span className="sm:hidden text-xs font-medium text-slate-500 block mt-0.5">Computer Engineering cutoffs</span>
           </h2>
         </div>
 
-        <div className="overflow-x-auto rounded-2xl border border-slate-200">
+        {/* Mobile card list */}
+        <div className="sm:hidden space-y-2">
+          {topColleges.map((col, idx) => {
+            const cs = col.branches.find(b => b.name.includes("Computer") || b.name.includes("CSE")) || col.branches[0];
+            const c2025 = cs?.cutoffs2025['GOPENH']?.percentile || 0;
+            const c2024 = cs?.cutoffs2024['GOPENH']?.percentile || 0;
+            const diff = c2025 - c2024;
+
+            return (
+              <div key={col.code} className="bg-slate-50/70 border border-slate-200 rounded-xl p-3 flex items-center gap-3">
+                <span className="w-9 h-9 rounded-full bg-slate-900 text-white text-sm font-extrabold flex items-center justify-center shrink-0">
+                  #{idx + 1}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-bold text-sm text-slate-900 truncate">{col.name}</h3>
+                  <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+                    <MapPin className="w-3 h-3 text-google-red-500 shrink-0" />
+                    {col.city}
+                  </p>
+                </div>
+                <div className="text-right shrink-0">
+                  <div className="text-base font-black text-google-blue-600">{c2025.toFixed(2)}%</div>
+                  <div className="text-[11px] text-slate-500 font-semibold">vs {c2024.toFixed(2)}%</div>
+                  <div className={`mt-1 inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full ${
+                    diff > 0
+                      ? 'bg-google-green-50 text-google-green-700'
+                      : diff < 0
+                        ? 'bg-google-red-50 text-google-red-600'
+                        : 'bg-slate-100 text-slate-600'
+                  }`}>
+                    {diff > 0 ? <ArrowUpRight className="w-3 h-3" /> : diff < 0 ? <ArrowDownRight className="w-3 h-3" /> : <Minus className="w-3 h-3" />}
+                    {diff >= 0 ? `+${diff.toFixed(2)}%` : `${diff.toFixed(2)}%`}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Desktop table */}
+        <div className="hidden sm:block overflow-x-auto rounded-2xl border border-slate-200">
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider border-b border-slate-200">
               <tr>
@@ -106,15 +144,14 @@ export const CutoffTrends: React.FC<CutoffTrendsProps> = ({ colleges }) => {
 
       </div>
 
-      {/* MHT-CET CAP FAQ Accordion */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4">
-        <div className="flex items-center gap-2 text-lg font-extrabold text-slate-900 mb-2">
-          <HelpCircle className="w-5 h-5 text-google-blue-500" />
-          Understanding MHT-CET CAP Admission Cutoffs
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 p-5 sm:p-6 md:p-8 shadow-sm space-y-4">
+        <div className="flex items-center gap-2 text-base sm:text-lg font-extrabold text-slate-900 mb-2">
+          <HelpCircle className="w-5 h-5 text-google-blue-500 shrink-0" />
+          <span>Understanding MHT-CET CAP Admission Cutoffs</span>
         </div>
 
-        <div className="space-y-4 text-xs sm:text-sm text-slate-600">
-          
+        <div className="space-y-3 sm:space-y-4 text-sm text-slate-600">
+
           <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/80">
             <h4 className="font-bold text-slate-900 mb-1">
               What does GOPENH vs GOPENO cutoff mean?
@@ -129,7 +166,7 @@ export const CutoffTrends: React.FC<CutoffTrendsProps> = ({ colleges }) => {
               Are these cutoffs based strictly on MHT-CET percentiles?
             </h4>
             <p>
-              Yes! All cutoffs displayed on this platform are based solely on official State Common Entrance Test Cell (MHT-CET) percentile scores and State Merit Ranks for engineering admissions (FE 2025/2024 CAP round lists).
+              Yes! All cutoffs displayed on this platform are based solely on official State Common Entrance Test Cell (MHT-CET) percentile scores and State Merit Ranks for engineering admissions (FE 2025 CAP round lists).
             </p>
           </div>
 

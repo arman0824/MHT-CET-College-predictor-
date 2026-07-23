@@ -1,5 +1,6 @@
-import React from 'react';
-import { School, Search, Target, GitCompare, TrendingUp, Sparkles, ShieldCheck } from 'lucide-react';
+import React, { useState } from 'react';
+import { School, Search, Target, GitCompare, TrendingUp, Sparkles, ShieldCheck, Menu } from 'lucide-react';
+import { MobileSheet } from './MobileSheet';
 
 interface NavbarProps {
   activeTab: 'explore' | 'predictor' | 'compare' | 'trends';
@@ -7,163 +8,247 @@ interface NavbarProps {
   compareCount: number;
 }
 
+type TabKey = 'explore' | 'predictor' | 'compare' | 'trends';
+
+interface TabMeta {
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  iconClass: string;
+  activePillClass: string;
+  activeTextClass: string;
+  activeBorderClass: string;
+  activeBgClass: string;
+  drawerIconBgClass: string;
+  drawerIconBorderClass: string;
+  description: string;
+}
+
+const TAB_META: Record<TabKey, TabMeta> = {
+  explore: {
+    label: 'Explore Colleges',
+    icon: Search,
+    iconClass: 'text-google-blue-500',
+    activePillClass: 'bg-white text-google-blue-600',
+    activeTextClass: 'text-google-blue-600',
+    activeBorderClass: 'border-google-blue-200',
+    activeBgClass: 'bg-google-blue-50',
+    drawerIconBgClass: 'bg-white',
+    drawerIconBorderClass: 'border-google-blue-100',
+    description: 'Browse 370+ Maharashtra engineering colleges'
+  },
+  predictor: {
+    label: 'College Predictor',
+    icon: Target,
+    iconClass: 'text-google-green-500',
+    activePillClass: 'bg-white text-google-green-600',
+    activeTextClass: 'text-google-green-600',
+    activeBorderClass: 'border-google-green-200',
+    activeBgClass: 'bg-google-green-50',
+    drawerIconBgClass: 'bg-white',
+    drawerIconBorderClass: 'border-google-green-100',
+    description: 'Predict your admission chances by percentile'
+  },
+  compare: {
+    label: 'Compare',
+    icon: GitCompare,
+    iconClass: 'text-google-yellow-500',
+    activePillClass: 'bg-white text-google-yellow-600',
+    activeTextClass: 'text-google-yellow-600',
+    activeBorderClass: 'border-google-yellow-200',
+    activeBgClass: 'bg-google-yellow-50',
+    drawerIconBgClass: 'bg-white',
+    drawerIconBorderClass: 'border-google-yellow-100',
+    description: 'Side-by-side college comparison (up to 3)'
+  },
+  trends: {
+    label: '2025 vs 2024 Trends',
+    icon: TrendingUp,
+    iconClass: 'text-google-red-500',
+    activePillClass: 'bg-white text-google-red-600',
+    activeTextClass: 'text-google-red-600',
+    activeBorderClass: 'border-google-red-200',
+    activeBgClass: 'bg-google-red-50',
+    drawerIconBgClass: 'bg-white',
+    drawerIconBorderClass: 'border-google-red-100',
+    description: 'Historical cutoff variations across top colleges'
+  }
+};
+
 export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, compareCount }) => {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const handleSelect = (tab: 'explore' | 'predictor' | 'compare' | 'trends') => {
+    setActiveTab(tab);
+    setDrawerOpen(false);
+  };
+
   return (
-    <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-[1fr_auto_1fr] items-center h-20 gap-4">
-          <div className="flex items-center justify-start">
-          {/* Brand Logo - Google Aesthetic */}
-          <div
-            onClick={() => setActiveTab('explore')}
-            className="flex items-center gap-3 cursor-pointer group shrink-0"
-          >
-            <div className="w-11 h-11 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-200">
-              <School className="w-6 h-6 text-google-blue-500" />
-            </div>
-            <div>
-              <div className="flex items-center gap-1 font-semibold text-lg tracking-tight text-slate-900">
-                <span className="text-google-blue-500 font-bold">CET</span>
-                <span>Vault</span>
+    <>
+      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Mobile header (h-14) */}
+          <div className="md:hidden flex items-center justify-between h-14">
+            <div
+              onClick={() => handleSelect('explore')}
+              className="flex items-center gap-2.5 cursor-pointer group"
+            >
+              <div className="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+                <School className="w-5 h-5 text-google-blue-500" />
               </div>
-              <p className="text-xs text-slate-500 font-medium leading-tight">
-                <span className="flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3 text-google-green-600 inline" />
+              <div>
+                <div className="flex items-center gap-0.5 font-semibold text-base tracking-tight text-slate-900 leading-tight">
+                  <span className="text-google-blue-500 font-bold">CET</span>
+                  <span>Vault</span>
+                </div>
+                <p className="text-[11px] text-slate-500 font-medium leading-tight flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3 text-google-green-600" />
                   Official CAP Cutoffs
-                </span>
-                370+ Maharashtra Colleges
-              </p>
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setDrawerOpen(true)}
+              className="touch-target inline-flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700"
+              aria-label="Open menu"
+              aria-expanded={drawerOpen}
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Desktop header (h-20) — unchanged */}
+          <div className="hidden md:grid grid-cols-[1fr_auto_1fr] items-center h-20 gap-4">
+            <div className="flex items-center justify-start">
+              <div
+                onClick={() => setActiveTab('explore')}
+                className="flex items-center gap-3 cursor-pointer group shrink-0"
+              >
+                <div className="w-11 h-11 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-200">
+                  <School className="w-6 h-6 text-google-blue-500" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-1 font-semibold text-lg tracking-tight text-slate-900">
+                    <span className="text-google-blue-500 font-bold">CET</span>
+                    <span>Vault</span>
+                  </div>
+                  <p className="text-xs text-slate-500 font-medium leading-tight">
+                    <span className="flex items-center gap-1">
+                      <ShieldCheck className="w-3 h-3 text-google-green-600 inline" />
+                      Official CAP Cutoffs
+                    </span>
+                    370+ Maharashtra Colleges
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center">
+              <nav className="flex items-center p-1.5 bg-slate-100/80 rounded-full border border-slate-200/60 shadow-[inner_0_1px_3px_rgba(0,0,0,0.06)]">
+                {(Object.keys(TAB_META) as Array<TabKey>).map((key) => {
+                  const meta = TAB_META[key];
+                  const Icon = meta.icon;
+                  const active = activeTab === key;
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => setActiveTab(key)}
+                      className={`flex items-center gap-2 px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                        active
+                          ? `${meta.activePillClass} shadow-[0_3px_8px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.08)] border border-slate-200/50 scale-[1.02]`
+                          : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
+                      }`}
+                    >
+                      <Icon className={`w-4 h-4 ${meta.iconClass}`} />
+                      {meta.label}
+                      {key === 'compare' && compareCount > 0 ? (
+                        <span className="w-5 h-5 bg-google-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center animate-pulse shadow-sm">
+                          {compareCount}
+                        </span>
+                      ) : null}
+                    </button>
+                  );
+                })}
+              </nav>
+            </div>
+
+            <div className="flex items-center justify-end">
+              <div className="flex items-center gap-3 shrink-0">
+                <a
+                  href="https://cetcell.mahacet.org"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hidden lg:flex items-center gap-2 bg-slate-900 text-white text-xs font-medium px-4 py-2 rounded-full shadow-[0_2px_6px_rgba(0,0,0,0.12)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.2)] hover:bg-slate-800 transition-all duration-150"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-google-yellow-500" />
+                  CET Portal ↗
+                </a>
+              </div>
             </div>
           </div>
-          </div>
+        </div>
+      </header>
 
-          <div className="flex items-center justify-center">
-          {/* Center Nav Pills with Google Material Depth */}
-          <nav className="hidden md:flex items-center p-1.5 bg-slate-100/80 rounded-full border border-slate-200/60 shadow-[inner_0_1px_3px_rgba(0,0,0,0.06)]">
-            <button
-              onClick={() => setActiveTab('explore')}
-              className={`flex items-center gap-2 px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                activeTab === 'explore'
-                  ? 'bg-white text-google-blue-600 shadow-[0_3px_8px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.08)] border border-slate-200/50 scale-[1.02]'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
-              }`}
-            >
-              <Search className="w-4 h-4 text-google-blue-500" />
-              Explore Colleges
-            </button>
-
-            <button
-              onClick={() => setActiveTab('predictor')}
-              className={`flex items-center justify-center gap-2 px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                activeTab === 'predictor'
-                  ? 'bg-white text-google-green-600 shadow-[0_3px_8px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.08)] border border-slate-200/50 scale-[1.02]'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
-              }`}
-            >
-              <Target className="w-4 h-4 text-google-green-500" />
-              College Predictor
-            </button>
-
-            <button
-              onClick={() => setActiveTab('compare')}
-              className={`flex items-center gap-2 px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 relative ${
-                activeTab === 'compare'
-                  ? 'bg-white text-google-yellow-600 shadow-[0_3px_8px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.08)] border border-slate-200/50 scale-[1.02]'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
-              }`}
-            >
-              <GitCompare className="w-4 h-4 text-google-yellow-600" />
-              Compare
-              {compareCount > 0 && (
-                <span className="w-5 h-5 bg-google-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center animate-pulse shadow-sm">
-                  {compareCount}
+      {/* Mobile hamburger drawer */}
+      <MobileSheet
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        title="Menu"
+        variant="drawer"
+      >
+        <nav className="flex flex-col gap-2 pt-1">
+          {(Object.keys(TAB_META) as Array<TabKey>).map((key) => {
+            const meta = TAB_META[key];
+            const Icon = meta.icon;
+            const active = activeTab === key;
+            return (
+              <button
+                key={key}
+                onClick={() => handleSelect(key)}
+                className={`touch-target text-left w-full flex items-center gap-3 px-3 py-3 rounded-2xl border transition-colors ${
+                  active
+                    ? `${meta.activeBgClass} ${meta.activeBorderClass}`
+                    : 'bg-white border-slate-200 text-slate-800 hover:bg-slate-50'
+                }`}
+              >
+                <span
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${
+                    active ? `${meta.drawerIconBgClass} ${meta.drawerIconBorderClass}` : 'bg-slate-100 border-transparent'
+                  }`}
+                >
+                  <Icon className={`w-5 h-5 ${meta.iconClass}`} />
                 </span>
-              )}
-            </button>
+                <span className="flex-1 min-w-0">
+                  <span className={`block font-bold text-sm ${active ? meta.activeTextClass : 'text-slate-900'}`}>
+                    {meta.label}
+                    {key === 'compare' && compareCount > 0 ? (
+                      <span className="ml-2 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-google-red-500 text-white text-[11px] font-extrabold">
+                        {compareCount}
+                      </span>
+                    ) : null}
+                  </span>
+                  <span className="block text-xs text-slate-500 mt-0.5 truncate">{meta.description}</span>
+                </span>
+              </button>
+            );
+          })}
 
-            <button
-              onClick={() => setActiveTab('trends')}
-              className={`flex items-center gap-2 px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                activeTab === 'trends'
-                  ? 'bg-white text-google-red-600 shadow-[0_3px_8px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.08)] border border-slate-200/50 scale-[1.02]'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
-              }`}
-            >
-              <TrendingUp className="w-4 h-4 text-google-red-500" />
-              2025 vs 2024 Trends
-            </button>
-          </nav>
-          </div>
-
-          <div className="flex items-center justify-end">
-          {/* Right Action - CET Portal Tag */}
-          <div className="flex items-center gap-3 shrink-0">
-            <a
-              href="https://cetcell.mahacet.org"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden lg:flex items-center gap-2 bg-slate-900 text-white text-xs font-medium px-4 py-2 rounded-full shadow-[0_2px_6px_rgba(0,0,0,0.12)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.2)] hover:bg-slate-800 transition-all duration-150"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-google-yellow-500" />
-              CET Portal ↗
-            </a>
-          </div>
-          </div>
-
-        </div>
-
-        {/* Mobile Navigation Bar */}
-        <div className="flex md:hidden items-center justify-between py-2.5 overflow-x-auto no-scrollbar gap-2 border-t border-slate-100">
-          <button
-            onClick={() => setActiveTab('explore')}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap shrink-0 transition-all ${
-              activeTab === 'explore'
-                ? 'bg-google-blue-500 text-white shadow-sm'
-                : 'bg-slate-100 text-slate-700'
-            }`}
+          <a
+            href="https://cetcell.mahacet.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="touch-target mt-3 w-full flex items-center justify-center gap-2 bg-slate-900 text-white text-sm font-semibold px-4 py-3 rounded-2xl shadow-sm"
           >
-            <Search className="w-3.5 h-3.5" />
-            Explore
-          </button>
+            <Sparkles className="w-4 h-4 text-google-yellow-500" />
+            Open CET Cell Portal ↗
+          </a>
 
-          <button
-            onClick={() => setActiveTab('predictor')}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap shrink-0 transition-all ${
-              activeTab === 'predictor'
-                ? 'bg-google-green-600 text-white shadow-sm'
-                : 'bg-slate-100 text-slate-700'
-            }`}
-          >
-            <Target className="w-3.5 h-3.5" />
-            Predictor
-          </button>
-
-          <button
-            onClick={() => setActiveTab('compare')}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap shrink-0 transition-all ${
-              activeTab === 'compare'
-                ? 'bg-google-yellow-500 text-white shadow-sm'
-                : 'bg-slate-100 text-slate-700'
-            }`}
-          >
-            <GitCompare className="w-3.5 h-3.5" />
-            Compare ({compareCount})
-          </button>
-
-          <button
-            onClick={() => setActiveTab('trends')}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap shrink-0 transition-all ${
-              activeTab === 'trends'
-                ? 'bg-google-red-500 text-white shadow-sm'
-                : 'bg-slate-100 text-slate-700'
-            }`}
-          >
-            <TrendingUp className="w-3.5 h-3.5" />
-            Trends
-          </button>
-        </div>
-
-      </div>
-    </header>
+          <p className="text-[12px] text-slate-500 text-center mt-2 flex items-center justify-center gap-1">
+            <ShieldCheck className="w-3 h-3 text-google-green-600" />
+            370+ Maharashtra colleges
+          </p>
+        </nav>
+      </MobileSheet>
+    </>
   );
 };

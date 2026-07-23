@@ -63,3 +63,65 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Mobile-friendly minimum touch target (44x44 per Apple HIG / Material) */
+@layer utilities {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Bottom safe area helper for fixed nav bars above iOS home indicator */
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* On mobile, force a 12px minimum text size for readability */
+  .min-text-mobile {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 639px) {
+  .min-text-mobile\:text-xs {
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+  }
+}
+
+/* Mobile animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.18s ease-out;
+}
+
+.animate-slideInUp {
+  animation: slideInUp 0.22s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.22s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Snap-scroll for side-by-side compare on mobile */
+.snap-x-mobile {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.snap-x-mobile > * {
+  scroll-snap-align: start;
+}
