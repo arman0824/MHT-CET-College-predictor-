@@ -104,7 +104,8 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
   comparedColleges
 }) => {
   const initial = loadPersisted();
-  const [userPercentile, setUserPercentile] = useState<number>(initial?.percentile ?? 95.0);
+  // Allowed userPercentile state to be number OR string to permit clear/empty inputs
+  const [userPercentile, setUserPercentile] = useState<number | string>(initial?.percentile ?? 95.0);
   const [userCategory, setUserCategory] = useState<string>(initial?.category ?? 'GOPENH');
   const [selectedRegion, setSelectedRegion] = useState<string>(initial?.region ?? 'ALL');
   const [selectedBranch, setSelectedBranch] = useState<string>(initial?.branch ?? 'ALL');
@@ -120,7 +121,7 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
       localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify({
-          percentile: userPercentile,
+          percentile: Number(userPercentile) || 0,
           category: userCategory,
           region: selectedRegion,
           branch: selectedBranch
@@ -200,7 +201,7 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
           </div>
         </div>
 
-        {/* Inputs Grid (stacks on mobile) */}
+        {/* Inputs Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 bg-slate-50 p-4 sm:p-6 rounded-2xl border border-slate-200/60">
 
           <div>
@@ -215,7 +216,17 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
               max="100"
               inputMode="decimal"
               value={userPercentile}
-              onChange={(e) => setUserPercentile(Math.min(100, Math.max(0, Number(e.target.value))))}
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val === '') {
+                  setUserPercentile('');
+                } else {
+                  const num = parseFloat(val);
+                  if (!isNaN(num)) {
+                    setUserPercentile(num > 100 ? 100 : val);
+                  }
+                }
+              }}
               className="touch-target w-full bg-white border border-slate-300 text-slate-900 font-bold text-xl sm:text-lg rounded-xl p-3 focus:ring-2 focus:ring-google-green-500 focus:outline-none shadow-sm"
               placeholder="e.g. 96.50"
             />
@@ -266,7 +277,7 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
           <div className="text-sm font-semibold text-slate-800 flex items-center gap-2 flex-wrap">
             <span>Calculated for:</span>
             <span className="bg-google-green-50 text-google-green-700 border border-google-green-200 px-3 py-1 rounded-full text-xs font-bold">
-              {userPercentile}%ile • {userCategory}
+              {userPercentile || 0}%ile • {userCategory}
             </span>
           </div>
 
