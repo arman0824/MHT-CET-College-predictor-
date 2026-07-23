@@ -1,9 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-// Since this file is inside src/data, colleges.json is in the exact same folder
-const jsonPath = path.join(__dirname, 'colleges.json');
-const tsPath = path.join(__dirname, 'colleges.ts');
+const jsonPath = path.resolve(__dirname, '../data/source/colleges.json');
+const outputPath = path.resolve(__dirname, '../public/data/colleges.json');
 
 if (!fs.existsSync(jsonPath)) {
   console.error('❌ Error: colleges.json not found in ' + __dirname);
@@ -72,36 +71,6 @@ const collegesData = jsonColleges.map((college) => {
   };
 });
 
-// Write to colleges.ts
-const tsContent = `export interface CutoffData {
-  percentile: number;
-  rank: number;
-}
-
-export interface Branch {
-  code: string;
-  name: string;
-  intake: number;
-  cutoffs2025: Record<string, CutoffData>;
-  cutoffs2024: Record<string, CutoffData>;
-}
-
-export interface College {
-  code: string;
-  name: string;
-  shortName: string;
-  city: string;
-  region: string;
-  status: string;
-  established: number;
-  fees: number;
-  rating: number;
-  website: string;
-  branches: Branch[];
-}
-
-export const collegesData: College[] = ${JSON.stringify(collegesData, null, 2)};
-`;
-
-fs.writeFileSync(tsPath, tsContent, 'utf8');
-console.log('✅ Successfully re-generated src/data/colleges.ts strictly from colleges.json!');
+fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+fs.writeFileSync(outputPath, JSON.stringify(collegesData), 'utf8');
+console.log('✅ Successfully regenerated public/data/colleges.json from data/source/colleges.json.');

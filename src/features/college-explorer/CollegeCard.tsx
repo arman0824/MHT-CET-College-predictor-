@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import type { College } from '../data/colleges';
+import type { College } from '../../shared/types/college';
 import { MapPin, Star, ChevronDown, ChevronUp, Plus, Check, Award, Flame } from 'lucide-react';
+import { findPreferredBranch, hasCategoryCutoff } from '../../shared/lib/college';
 
 interface CollegeCardProps {
   college: College;
@@ -18,17 +19,11 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
   const [expanded, setExpanded] = useState(false);
   const [activeBranchFilter, setActiveBranchFilter] = useState<string>('ALL');
 
-  // Find top branch that has exact data for selectedCategory
-  const csBranch = college.branches.find(
-    b => (b.name.includes("Computer") || b.name.includes("CSE")) && b.cutoffs2025?.[selectedCategory]
-  ) || college.branches.find(
-    b => b.cutoffs2025?.[selectedCategory]
-  ) || college.branches[0];
+  const csBranch = findPreferredBranch(college, selectedCategory) ?? college.branches[0];
 
   const topCutoff2025 = csBranch?.cutoffs2025?.[selectedCategory];
 
-  // Only display branches that have exact data for selectedCategory
-  const availableBranches = college.branches.filter(b => b.cutoffs2025?.[selectedCategory]);
+  const availableBranches = college.branches.filter((branch) => hasCategoryCutoff(branch, selectedCategory));
   const displayedBranches = activeBranchFilter === 'ALL'
     ? availableBranches
     : availableBranches.filter(b => b.name.toLowerCase().includes(activeBranchFilter.toLowerCase()));

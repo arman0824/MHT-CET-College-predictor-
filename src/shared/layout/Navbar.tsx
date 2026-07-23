@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { School, Search, Target, GitCompare, TrendingUp, Sparkles, ShieldCheck, Menu, Download } from 'lucide-react';
-import { MobileSheet } from './MobileSheet';
+import { School, Search, Target, GitCompare, BookOpen, ShieldCheck, Menu, Download } from 'lucide-react';
+import { MobileSheet } from '../components/MobileSheet';
+import type { AppTab } from '../../app/navigation';
 
 interface NavbarProps {
-  activeTab: 'explore' | 'predictor' | 'compare' | 'trends';
-  setActiveTab: (tab: 'explore' | 'predictor' | 'compare' | 'trends') => void;
+  activeTab: AppTab;
+  setActiveTab: (tab: AppTab) => void;
   compareCount: number;
 }
 
-type TabKey = 'explore' | 'predictor' | 'compare' | 'trends';
+type TabKey = AppTab;
 
 interface TabMeta {
   label: string;
@@ -61,23 +62,23 @@ const TAB_META: Record<TabKey, TabMeta> = {
     description: 'Side-by-side college comparison (up to 3)'
   },
   trends: {
-    label: '2025 vs 2024 Trends',
-    icon: TrendingUp,
-    iconClass: 'text-google-red-500',
-    activePillClass: 'bg-white text-google-red-600',
-    activeTextClass: 'text-google-red-600',
-    activeBorderClass: 'border-google-red-200',
-    activeBgClass: 'bg-google-red-50',
+    label: 'About CAP',
+    icon: BookOpen,
+    iconClass: 'text-google-blue-500',
+    activePillClass: 'bg-white text-google-blue-600',
+    activeTextClass: 'text-google-blue-600',
+    activeBorderClass: 'border-google-blue-200',
+    activeBgClass: 'bg-google-blue-50',
     drawerIconBgClass: 'bg-white',
-    drawerIconBorderClass: 'border-google-red-100',
-    description: 'Historical cutoff variations across top colleges'
+    drawerIconBorderClass: 'border-google-blue-100',
+    description: 'CAP guidance and frequently asked questions'
   }
 };
 
 export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, compareCount }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const handleSelect = (tab: 'explore' | 'predictor' | 'compare' | 'trends') => {
+  const handleSelect = (tab: AppTab) => {
     setActiveTab(tab);
     setDrawerOpen(false);
   };
@@ -175,13 +176,12 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, compare
             <div className="flex items-center justify-end">
               <div className="flex items-center gap-3 shrink-0">
                 <a
-                  href="https://cetcell.mahacet.org"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hidden lg:flex items-center gap-2 bg-slate-900 text-white text-xs font-medium px-4 py-2 rounded-full shadow-[0_2px_6px_rgba(0,0,0,0.12)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.2)] hover:bg-slate-800 transition-all duration-150"
+                  href="/CAP-round-2025.pdf"
+                  download="MHT-CET-CAP-ROUND-2025.pdf"
+                  className="hidden lg:flex items-center gap-2 bg-google-blue-50 text-google-blue-700 border border-google-blue-100 text-xs font-bold px-4 py-2 rounded-full hover:bg-google-blue-100 hover:border-google-blue-200 transition-colors duration-150"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-google-yellow-500" />
-                  CET Portal ↗
+                  <Download className="w-3.5 h-3.5" />
+                  2025 Cutoffs
                 </a>
               </div>
             </div>

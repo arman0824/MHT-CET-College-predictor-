@@ -2,8 +2,8 @@ import pdfplumber
 import json
 import re
 
-PDF_PATH = "CAP-round-2025.pdf"
-OUTPUT_JSON = "src/data/colleges_exact.json"
+PDF_PATH = "public/CAP-round-2025.pdf"
+OUTPUT_JSON = "data/source/colleges-extracted.json"
 
 # Master list of standard MHT CET categories
 STANDARD_CATEGORIES = [

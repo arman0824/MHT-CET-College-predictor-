@@ -23,3 +23,35 @@ An all-in-one web application for MHT-CET engineering aspirants in Maharashtra t
 - **Deployment:** Vercel
 
 ---
+
+## Project structure
+
+```text
+src/
+  app/        Application composition and navigation types
+  features/   Feature-specific screens and components
+  shared/     Reusable UI, layout, domain utilities, and types
+  shared/api/ Cached client-side access to the generated dataset
+  styles/     Global Tailwind styles
+data/source/  Source cutoff data used to generate the dataset
+scripts/      Data extraction and generation utilities
+```
+
+## Development
+
+```bash
+npm install
+npm run dev
+npm run build
+npm run lint
+```
+
+## Data workflow
+
+`data/source/colleges.json` is the source dataset. Run the following after updating it to regenerate the cached static dataset at `public/data/colleges.json`:
+
+```bash
+npm run data:generate
+```
+
+`npm run data:extract` extracts raw cutoff data from `public/CAP-round-2025.pdf` into `data/source/colleges-extracted.json`. It requires Python and `pdfplumber`.

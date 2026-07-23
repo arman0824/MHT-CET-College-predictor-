@@ -97,5 +97,3 @@ export const MobileSheet: React.FC<MobileSheetProps> = ({
     </div>
   );
 };
-
-export default MobileSheet;

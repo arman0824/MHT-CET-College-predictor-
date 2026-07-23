@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import type { College } from '../data/colleges';
+import type { College } from '../../shared/types/college';
 import { Target, Sparkles, CheckCircle, AlertCircle, BookmarkPlus, MapPin, Save } from 'lucide-react';
+import { calculatePredictions, type PredictionBucket } from './predictionUtils';
 
 interface CutoffPredictorProps {
   colleges: College[];
@@ -113,9 +114,7 @@ const loadPersisted = (): PersistedState | null => {
   }
 };
 
-type Bucket = 'safe' | 'moderate' | 'dream';
-
-const BUCKET_META: Record<Bucket, { label: string; short: string; icon: React.ComponentType<{ className?: string }>; color: string; bgClass: string; borderClass: string; textClass: string; description: string }> = {
+const BUCKET_META: Record<PredictionBucket, { label: string; short: string; icon: React.ComponentType<{ className?: string }>; color: string; bgClass: string; borderClass: string; textClass: string; description: string }> = {
   safe: {
     label: 'High Chance (Safe)',
     short: 'Safe',
@@ -211,7 +210,7 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
   });
   const [selectedRegion, ] = useState<string>(initial?.region ?? 'ALL');
   const [selectedBranch, setSelectedBranch] = useState<string>(initial?.branch ?? 'ALL');
-  const [activeTab, setActiveTab] = useState<Bucket>('safe');
+  const [activeTab, setActiveTab] = useState<PredictionBucket>('safe');
   const [saved, setSaved] = useState<boolean>(!!initial);
 
   // Keep userCategory synced with available categories if necessary
@@ -242,71 +241,10 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
     }
   };
 
-  // Calculation Engine - Enforces strict category cutoffs without fake fallbacks
-  const predictions = useMemo(() => {
-    const p = typeof userPercentile === 'number' ? userPercentile : parseFloat(String(userPercentile));
-    if (isNaN(p) || p < 0 || !userCategory) {
-      return { safeList: [], moderateList: [], dreamList: [] };
-    }
-
-    const safeList: Array<{ college: College; branchName: string; cutoffP: number; rank: number; margin: number }> = [];
-    const moderateList: Array<{ college: College; branchName: string; cutoffP: number; rank: number; margin: number }> = [];
-    const dreamList: Array<{ college: College; branchName: string; cutoffP: number; rank: number; margin: number }> = [];
-
-    colleges.forEach((college) => {
-      if (selectedRegion !== 'ALL' && college.region !== selectedRegion && !college.city.toLowerCase().includes(selectedRegion.toLowerCase())) {
-        return;
-      }
-
-      college.branches.forEach((branch) => {
-        if (selectedBranch !== 'ALL' && !branch.name.toLowerCase().includes(selectedBranch.toLowerCase())) {
-          return;
-        }
-
-        // Strictly evaluate cutoff for selected category.
-        // NO fallback to GOPENH and NO fake 99.9/99999 values!
-        const cutoffData = branch.cutoffs2025?.[userCategory];
-        if (
-          !cutoffData ||
-          typeof cutoffData.percentile !== 'number' ||
-          isNaN(cutoffData.percentile) ||
-          typeof cutoffData.rank !== 'number' ||
-          isNaN(cutoffData.rank)
-        ) {
-          return;
-        }
-
-        const cutoffP = cutoffData.percentile;
-        const rank = cutoffData.rank;
-        const margin = p - cutoffP;
-
-        if (margin >= 0) {
-          safeList.push({ college, branchName: branch.name, cutoffP, rank, margin });
-        } else if (margin >= -1.5 && margin < 0) {
-          moderateList.push({ college, branchName: branch.name, cutoffP, rank, margin });
-        } else if (margin >= -3.5 && margin < -1.5) {
-          dreamList.push({ college, branchName: branch.name, cutoffP, rank, margin });
-        }
-      });
-    });
-
-    // Sort within each bucket by closeness to user score (smallest absolute margin first)
-    const sortFn = (
-      a: { margin: number; cutoffP: number; college: College; branchName: string },
-      b: { margin: number; cutoffP: number; college: College; branchName: string }
-    ) => {
-      const absDiff = Math.abs(a.margin) - Math.abs(b.margin);
-      if (Math.abs(absDiff) > 0.0001) return absDiff;
-      if (b.cutoffP !== a.cutoffP) return b.cutoffP - a.cutoffP;
-      return a.college.name.localeCompare(b.college.name);
-    };
-
-    safeList.sort(sortFn);
-    moderateList.sort(sortFn);
-    dreamList.sort(sortFn);
-
-    return { safeList, moderateList, dreamList };
-  }, [colleges, userPercentile, userCategory, selectedRegion, selectedBranch]);
+  const predictions = useMemo(
+    () => calculatePredictions(colleges, userPercentile, userCategory, selectedRegion, selectedBranch),
+    [colleges, userPercentile, userCategory, selectedRegion, selectedBranch],
+  );
 
   const activeList = activeTab === 'safe'
     ? predictions.safeList
@@ -422,7 +360,7 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
       {/* Bucket segmented tabs (mobile-first) + 3-col cards (desktop) */}
       <div className="md:hidden -mx-4 px-4 overflow-x-auto no-scrollbar">
         <div className="flex items-center gap-2 min-w-max">
-          {(Object.keys(BUCKET_META) as Bucket[]).map((key) => {
+          {(Object.keys(BUCKET_META) as PredictionBucket[]).map((key) => {
             const meta = BUCKET_META[key];
             const Icon = meta.icon;
             const count = key === 'safe' ? predictions.safeList.length : key === 'moderate' ? predictions.moderateList.length : predictions.dreamList.length;
@@ -451,7 +389,7 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
       </div>
 
       <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-4">
-        {(Object.keys(BUCKET_META) as Bucket[]).map((key) => {
+        {(Object.keys(BUCKET_META) as PredictionBucket[]).map((key) => {
           const meta = BUCKET_META[key];
           const Icon = meta.icon;
           const count = key === 'safe' ? predictions.safeList.length : key === 'moderate' ? predictions.moderateList.length : predictions.dreamList.length;

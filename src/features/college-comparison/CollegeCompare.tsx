@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import type { College } from '../data/colleges';
+import type { College } from '../../shared/types/college';
 import { GitCompare, X, Star, MapPin, Trash2, LayoutGrid, Rows3 } from 'lucide-react';
+import { findBranchByKeywords, getCategoryCutoff } from '../../shared/lib/college';
 
 interface CollegeCompareProps {
   comparedColleges: College[];
@@ -19,12 +20,12 @@ interface BranchCutoffs {
 }
 
 const getCutoffs = (college: College): BranchCutoffs => {
-  const cs = college.branches.find(b => b.name.includes("Computer") || b.name.includes("CSE"));
-  const it = college.branches.find(b => b.name.includes("Information Technology") || b.name.includes("IT"));
-  const ai = college.branches.find(b => b.name.includes("Artificial") || b.name.includes("AI"));
-  const entc = college.branches.find(b => b.name.includes("Telecommunication") || b.name.includes("Electronics"));
+  const cs = findBranchByKeywords(college, ['Computer', 'CSE']);
+  const it = findBranchByKeywords(college, ['Information Technology', 'IT']);
+  const ai = findBranchByKeywords(college, ['Artificial', 'AI']);
+  const entc = findBranchByKeywords(college, ['Telecommunication', 'Electronics']);
 
-  const pick = (b: typeof cs) => (b?.cutoffs2025['GOPENH'] ? { percentile: b.cutoffs2025['GOPENH'].percentile, rank: b.cutoffs2025['GOPENH'].rank } : null);
+  const pick = (branch: typeof cs) => getCategoryCutoff(branch, 'GOPENH');
   return { cs: pick(cs), it: pick(it), ai: pick(ai), entc: pick(entc) };
 };
 

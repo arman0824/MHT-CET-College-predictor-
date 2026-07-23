@@ -1,9 +1,10 @@
-import React, { useState, useMemo } from 'react';
-import type { College } from '../data/colleges';
+import React, { useDeferredValue, useEffect, useMemo, useState } from 'react';
+import type { College } from '../../shared/types/college';
 import { CollegeCard } from './CollegeCard';
 import { Search, SlidersHorizontal, RotateCcw, Filter, Check } from 'lucide-react';
-import { MobileSheet } from './MobileSheet';
-import { Chip } from './Chip';
+import { MobileSheet } from '../../shared/components/MobileSheet';
+import { Chip } from '../../shared/components/Chip';
+import { findPreferredBranch, hasCategoryCutoff } from '../../shared/lib/college';
 
 interface CollegeExplorerProps {
   colleges: College[];
@@ -106,6 +107,8 @@ const SORT_OPTIONS: Array<{ id: 'percentile_desc' | 'percentile_asc' | 'name' | 
   { id: 'name', label: 'College Name (A-Z)' }
 ];
 
+const RESULTS_PER_PAGE = 24;
+
 export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
   colleges,
   comparedColleges,
@@ -169,6 +172,8 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
   const [sortBy, setSortBy] = useState<'percentile_desc' | 'percentile_asc' | 'name' | 'rating'>('percentile_desc');
   const [minPercentile, setMinPercentile] = useState<number>(0);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(RESULTS_PER_PAGE);
+  const deferredSearchTerm = useDeferredValue(searchTerm);
 
   const handleResetFilters = () => {
     setSearchTerm('');
@@ -191,17 +196,15 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
   const filteredColleges = useMemo(() => {
     return colleges.filter((col) => {
       // Must have at least one branch with exact category cutoff data
-      const hasCategoryData = col.branches.some(
-        (b) => b.cutoffs2025?.[selectedCategory] && typeof b.cutoffs2025[selectedCategory].percentile === 'number'
-      );
+      const hasCategoryData = col.branches.some((branch) => hasCategoryCutoff(branch, selectedCategory));
       if (!hasCategoryData) return false;
 
       const matchesSearch =
-        searchTerm.trim() === '' ||
-        col.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        col.shortName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        col.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        col.code.includes(searchTerm);
+        deferredSearchTerm.trim() === '' ||
+        col.name.toLowerCase().includes(deferredSearchTerm.toLowerCase()) ||
+        col.shortName.toLowerCase().includes(deferredSearchTerm.toLowerCase()) ||
+        col.city.toLowerCase().includes(deferredSearchTerm.toLowerCase()) ||
+        col.code.includes(deferredSearchTerm);
 
       const matchesRegion =
         selectedRegion === 'ALL' || col.region === selectedRegion || col.city.toLowerCase().includes(selectedRegion.toLowerCase());
@@ -214,16 +217,16 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
 
       const matchesBranch =
         selectedBranch === 'ALL' ||
-        col.branches.some(b => b.name.toLowerCase().includes(selectedBranch.toLowerCase()) && b.cutoffs2025?.[selectedCategory]);
+        col.branches.some((branch) => branch.name.toLowerCase().includes(selectedBranch.toLowerCase()) && hasCategoryCutoff(branch, selectedCategory));
 
-      const topBranch = col.branches.find(b => (b.name.includes("Computer") || b.name.includes("CSE")) && b.cutoffs2025?.[selectedCategory]) || col.branches.find(b => b.cutoffs2025?.[selectedCategory]);
+      const topBranch = findPreferredBranch(col, selectedCategory);
       const p = topBranch?.cutoffs2025?.[selectedCategory]?.percentile || 0;
       const matchesPercentile = p >= minPercentile;
 
       return matchesSearch && matchesRegion && matchesStatus && matchesBranch && matchesPercentile;
     }).sort((colA, colB) => {
-      const aTopBranch = colA.branches.find(br => (br.name.includes("Computer") || br.name.includes("CSE")) && br.cutoffs2025?.[selectedCategory]) || colA.branches.find(br => br.cutoffs2025?.[selectedCategory]);
-      const bTopBranch = colB.branches.find(br => (br.name.includes("Computer") || br.name.includes("CSE")) && br.cutoffs2025?.[selectedCategory]) || colB.branches.find(br => br.cutoffs2025?.[selectedCategory]);
+      const aTopBranch = findPreferredBranch(colA, selectedCategory);
+      const bTopBranch = findPreferredBranch(colB, selectedCategory);
 
       const aCutoff = aTopBranch?.cutoffs2025?.[selectedCategory]?.percentile || 0;
       const bCutoff = bTopBranch?.cutoffs2025?.[selectedCategory]?.percentile || 0;
@@ -234,7 +237,13 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
       if (sortBy === 'rating') return colB.rating - colA.rating;
       return 0;
     });
-  }, [colleges, searchTerm, selectedRegion, selectedStatus, selectedBranch, selectedCategory, sortBy, minPercentile]);
+  }, [colleges, deferredSearchTerm, selectedRegion, selectedStatus, selectedBranch, selectedCategory, sortBy, minPercentile]);
+
+  useEffect(() => {
+    setVisibleCount(RESULTS_PER_PAGE);
+  }, [filteredColleges]);
+
+  const visibleColleges = filteredColleges.slice(0, visibleCount);
 
   const statusLabel = STATUS_OPTIONS.find(s => s.id === selectedStatus)?.label || '';
   const branchLabel = BRANCH_OPTIONS.find(b => b.id === selectedBranch)?.label || '';
@@ -485,7 +494,7 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
       {/* Search Results Summary Header */}
       <div className="flex flex-wrap items-center justify-between gap-2 px-2">
         <div className="text-sm font-semibold text-slate-700">
-          Showing <span className="font-bold text-slate-900">{filteredColleges.length}</span> colleges matching criteria
+          Showing <span className="font-bold text-slate-900">{visibleColleges.length}</span> of <span className="font-bold text-slate-900">{filteredColleges.length}</span> colleges matching criteria
         </div>
         <div className="text-xs text-slate-500 font-medium hidden sm:block">
           Active Category: <span className="font-bold text-google-blue-600 bg-google-blue-50 px-2 py-0.5 rounded border border-google-blue-100">{selectedCategory}</span>
@@ -495,7 +504,7 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
       {/* College List Grid */}
       {filteredColleges.length > 0 ? (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-          {filteredColleges.map((college) => {
+          {visibleColleges.map((college) => {
             const isCompared = comparedColleges.some(c => c.code === college.code);
             return (
               <CollegeCard
@@ -525,6 +534,17 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
           </button>
         </div>
       )}
+
+      {visibleColleges.length < filteredColleges.length ? (
+        <div className="flex justify-center">
+          <button
+            onClick={() => setVisibleCount((count) => count + RESULTS_PER_PAGE)}
+            className="google-btn-secondary text-sm"
+          >
+            Load 24 more colleges
+          </button>
+        </div>
+      ) : null}
 
       {/* Mobile filter bottom sheet */}
       <MobileSheet

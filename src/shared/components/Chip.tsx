@@ -42,5 +42,3 @@ export const Chip: React.FC<ChipProps> = ({
     </span>
   );
 };
-
-export default Chip;

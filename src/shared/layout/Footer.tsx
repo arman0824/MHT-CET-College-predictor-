@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { School, GitCompare, Target, TrendingUp, ShieldCheck, ExternalLink, Download, ChevronDown } from 'lucide-react';
-
-type FooterTab = 'explore' | 'predictor' | 'compare' | 'trends';
+import { School, GitCompare, Target, BookOpen, ShieldCheck, ExternalLink, Download, ChevronDown } from 'lucide-react';
+import type { AppTab } from '../../app/navigation';
 
 interface FooterProps {
-  setActiveTab: (tab: FooterTab) => void;
+  setActiveTab: (tab: AppTab) => void;
 }
 
 const REGION_LINKS = [
@@ -42,7 +41,7 @@ const AccordionSection: React.FC<{ title: string; defaultOpen?: boolean; childre
 };
 
 export const Footer: React.FC<FooterProps> = ({ setActiveTab }) => {
-  const goTo = (tab: FooterTab) => {
+  const goTo = (tab: AppTab) => {
     setActiveTab(tab);
     if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -107,8 +106,8 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab }) => {
                 onClick={() => goTo('trends')}
                 className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors py-1 text-left"
               >
-                <TrendingUp className="w-4 h-4 text-google-red-400 shrink-0" />
-                <span>2025 vs 2024 Trends</span>
+                <BookOpen className="w-4 h-4 text-google-blue-400 shrink-0" />
+                <span>About CAP</span>
               </button>
             </nav>
           </AccordionSection>
