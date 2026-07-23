@@ -25,7 +25,7 @@ const AccordionSection: React.FC<{ title: string; defaultOpen?: boolean; childre
 }) => {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="md:open border-b md:border-b-0 border-slate-800 last:border-b-0">
+    <div className="border-b md:border-b-0 border-slate-800 last:border-b-0">
       <button
         onClick={() => setOpen(o => !o)}
         className="md:cursor-default md:pointer-events-none w-full flex items-center justify-between py-3 md:py-0 md:mb-4 text-left"
@@ -50,11 +50,11 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab }) => {
   };
 
   return (
-    <footer className="bg-slate-900 text-slate-300 pt-10 pb-24 md:pb-6 mt-auto safe-bottom">
+    <footer className="bg-slate-900 text-slate-300 pt-10 pb-12 md:pb-6 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* Brand column - always visible */}
-        <div className="space-y-4 mb-6 md:mb-10">
+        {/* Brand column */}
+        <div className="space-y-4 mb-8 md:mb-10">
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-2xl bg-white border border-slate-200 shadow flex items-center justify-center">
               <School className="w-6 h-6 text-google-blue-500" />
@@ -72,40 +72,40 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab }) => {
             India's most comprehensive MHT-CET engineering cutoff tracker. Real-time data for 370+ Maharashtra colleges across Mumbai, Pune, Nagpur, Nashik, and all major regions.
           </p>
 
-          <div className="flex items-center gap-1 text-xs text-slate-500">
-            <ShieldCheck className="w-3.5 h-3.5 text-google-green-500 inline" />
+          <div className="flex items-center gap-1.5 text-xs text-slate-400">
+            <ShieldCheck className="w-4 h-4 text-google-green-500 inline shrink-0" />
             <span>Verified CET Cell Data</span>
           </div>
         </div>
 
-        {/* Accordion sections on mobile, 3-col grid on md+ */}
+        {/* 3-Column Grid */}
         <div className="md:grid md:grid-cols-3 md:gap-8 md:mb-10 space-y-2 md:space-y-0">
           <AccordionSection title="Explore Tools" defaultOpen>
-            <nav className="flex flex-col gap-2.5">
+            <nav className="flex flex-col gap-2">
               <button
                 onClick={() => goTo('explore')}
-                className="touch-target -ml-2 px-2 inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+                className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors py-1 text-left"
               >
                 <School className="w-4 h-4 text-google-blue-400 shrink-0" />
                 <span>Explore 370+ Colleges</span>
               </button>
               <button
                 onClick={() => goTo('predictor')}
-                className="touch-target -ml-2 px-2 inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+                className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors py-1 text-left"
               >
                 <Target className="w-4 h-4 text-google-green-400 shrink-0" />
                 <span>College Predictor</span>
               </button>
               <button
                 onClick={() => goTo('compare')}
-                className="touch-target -ml-2 px-2 inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+                className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors py-1 text-left"
               >
                 <GitCompare className="w-4 h-4 text-google-yellow-400 shrink-0" />
                 <span>Side-by-Side Compare</span>
               </button>
               <button
                 onClick={() => goTo('trends')}
-                className="touch-target -ml-2 px-2 inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+                className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors py-1 text-left"
               >
                 <TrendingUp className="w-4 h-4 text-google-red-400 shrink-0" />
                 <span>2025 vs 2024 Trends</span>
@@ -113,8 +113,8 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab }) => {
             </nav>
           </AccordionSection>
 
-          <AccordionSection title="Maharashtra Regions">
-            <div className="grid grid-cols-2 gap-x-3 gap-y-2">
+          <AccordionSection title="Maharashtra Regions" defaultOpen>
+            <div className="grid grid-cols-2 gap-x-3 gap-y-2 py-1">
               {REGION_LINKS.map((label) => (
                 <a
                   key={label}
@@ -127,53 +127,35 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab }) => {
             </div>
           </AccordionSection>
 
-          <AccordionSection title="Quick Links">
-            <nav className="flex flex-col gap-2.5">
+          <AccordionSection title="Quick Links" defaultOpen>
+            <nav className="flex flex-col gap-2">
               <a
                 href="https://cetcell.mahacet.org"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="touch-target -ml-2 px-2 inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+                className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors py-1"
               >
-                <ExternalLink className="w-4 h-4 shrink-0" />
+                <ExternalLink className="w-4 h-4 shrink-0 text-slate-400" />
                 <span>Official CET Cell Portal</span>
               </a>
               <a
                 href="https://fe2026.mahacet.org/StaticPages/HomePage"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="touch-target -ml-2 px-2 inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+                className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors py-1"
               >
-                <ExternalLink className="w-4 h-4 shrink-0" />
+                <ExternalLink className="w-4 h-4 shrink-0 text-slate-400" />
                 <span>Merit List 2026</span>
               </a>
               <a
                 href="/CAP-round-2025.pdf"
                 download="MHT-CET-CAP-ROUND-2025.pdf"
-                className="md:hidden touch-target -ml-2 px-2 inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+                className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors py-1"
               >
-                <Download className="w-4 h-4 shrink-0" />
-                <span>Information Brochure PDF</span>
-              </a>
-              <a
-                href="/CAP-round-2025.pdf"
-                download="MHT-CET-CAP-ROUND-2025.pdf"
-                className="hidden md:inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
-              >
-                <Download className="w-4 h-4 shrink-0" />
+                <Download className="w-4 h-4 shrink-0 text-slate-400" />
                 <span>Information Brochure PDF</span>
               </a>
             </nav>
-
-            {/* Mobile-only full-width PDF button */}
-            <a
-              href="/CAP-round-2025.pdf"
-              download="MHT-CET-CAP-ROUND-2025.pdf"
-              className="md:hidden mt-3 touch-target w-full inline-flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-semibold rounded-full"
-            >
-              <Download className="w-4 h-4" />
-              Download Brochure PDF
-            </a>
           </AccordionSection>
         </div>
 
