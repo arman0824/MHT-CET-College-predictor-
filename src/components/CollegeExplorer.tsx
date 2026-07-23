@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import type { College } from '../data/colleges';
 import { CollegeCard } from './CollegeCard';
-import { Search, SlidersHorizontal, MapPin, RotateCcw, Filter, Check } from 'lucide-react';
+import { Search, SlidersHorizontal, RotateCcw, Filter, Check } from 'lucide-react';
 import { MobileSheet } from './MobileSheet';
 import { Chip } from './Chip';
 
@@ -82,17 +82,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   PWDOBCH: 'PWDOBCH (PWD OBC Home Univ)',
   PWDSCS: 'PWDSCS (PWD SC State)'
 };
-
-const REGIONS = [
-  { id: 'ALL', label: 'All Regions' },
-  { id: 'Mumbai', label: 'Mumbai & Thane' },
-  { id: 'Pune', label: 'Pune' },
-  { id: 'Nagpur', label: 'Nagpur' },
-  { id: 'Nashik', label: 'Nashik' },
-  { id: 'Aurangabad', label: 'Chh. Sambhajinagar' },
-  { id: 'Sangli/Kolhapur/Satara', label: 'Sangli/Kolhapur' },
-  { id: 'Nanded/Amravati/Jalgaon', label: 'Amravati & Nanded' }
-];
 
 const BRANCH_OPTIONS = [
   { id: 'ALL', label: 'All Branches' },
@@ -250,7 +239,6 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
     });
   }, [colleges, searchTerm, selectedRegion, selectedStatus, selectedBranch, selectedCategory, sortBy, minPercentile]);
 
-  const regionLabel = REGIONS.find(r => r.id === selectedRegion)?.label || '';
   const statusLabel = STATUS_OPTIONS.find(s => s.id === selectedStatus)?.label || '';
   const branchLabel = BRANCH_OPTIONS.find(b => b.id === selectedBranch)?.label || '';
   const categoryLabel = categories.find(c => c.id === selectedCategory)?.label?.split(' ')[0] || selectedCategory;
@@ -268,28 +256,6 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
             <option key={cat.id} value={cat.id}>{cat.label}</option>
           ))}
         </select>
-      </div>
-
-      <div>
-        <label className="text-sm font-bold text-slate-700 mb-2 block">Region</label>
-        <div className="grid grid-cols-2 gap-2">
-          {REGIONS.map((reg) => {
-            const active = selectedRegion === reg.id;
-            return (
-              <button
-                key={reg.id}
-                onClick={() => setSelectedRegion(reg.id)}
-                className={`touch-target w-full text-left px-3 py-3 rounded-xl text-xs font-semibold border transition-colors ${
-                  active
-                    ? 'bg-google-blue-50 border-google-blue-300 text-google-blue-700'
-                    : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
-                }`}
-              >
-                {reg.label}
-              </button>
-            );
-          })}
-        </div>
       </div>
 
       <div>
@@ -403,25 +369,6 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
         </div>
 
         {/* Desktop Region Pills (visible >= md) */}
-        <div className="hidden md:flex items-center justify-center gap-2 overflow-x-auto no-scrollbar pt-6">
-          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider shrink-0 flex items-center gap-1">
-            <MapPin className="w-3.5 h-3.5 text-google-red-500" />
-            Region:
-          </span>
-          {REGIONS.map((reg) => (
-            <button
-              key={reg.id}
-              onClick={() => setSelectedRegion(reg.id)}
-              className={`text-xs font-semibold px-4 py-2 rounded-full whitespace-nowrap transition-all duration-150 ${
-                selectedRegion === reg.id
-                  ? 'bg-google-blue-500 text-white shadow-[0_2px_8px_rgba(26,115,232,0.3)] scale-[1.02]'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              {reg.label}
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* Mobile active filter chips (visible < md) */}
@@ -429,9 +376,6 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
         <div className="md:hidden -mt-2">
           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
             <span className="text-xs font-bold text-slate-500 uppercase shrink-0">Active:</span>
-            {selectedRegion !== 'ALL' ? (
-              <Chip color="blue" label={regionLabel} onRemove={() => setSelectedRegion('ALL')} />
-            ) : null}
             {selectedStatus !== 'ALL' ? (
               <Chip color="blue" label={statusLabel} onRemove={() => setSelectedStatus('ALL')} />
             ) : null}

@@ -80,17 +80,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   PWDSCS: 'PWDSCS (PWD SC State)'
 };
 
-const REGIONS = [
-  { id: 'ALL', label: 'All Regions (Maharashtra)' },
-  { id: 'Mumbai', label: 'Mumbai & Thane' },
-  { id: 'Pune', label: 'Pune' },
-  { id: 'Nagpur', label: 'Nagpur' },
-  { id: 'Nashik', label: 'Nashik' },
-  { id: 'Aurangabad', label: 'Chh. Sambhajinagar' },
-  { id: 'Sangli/Kolhapur/Satara', label: 'Sangli / Kolhapur' },
-  { id: 'Nanded/Amravati/Jalgaon', label: 'Amravati & Nanded' }
-];
-
 const BRANCHES = [
   { id: 'ALL', label: 'All Branches' },
   { id: 'Computer', label: 'Computer Engineering / CSE' },
@@ -220,7 +209,7 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
     if (initial?.category) return initial.category;
     return 'GOPENH';
   });
-  const [selectedRegion, setSelectedRegion] = useState<string>(initial?.region ?? 'ALL');
+  const [selectedRegion, ] = useState<string>(initial?.region ?? 'ALL');
   const [selectedBranch, setSelectedBranch] = useState<string>(initial?.branch ?? 'ALL');
   const [activeTab, setActiveTab] = useState<Bucket>('safe');
   const [saved, setSaved] = useState<boolean>(!!initial);
@@ -387,19 +376,6 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
             >
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>{c.label}</option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="text-sm font-bold text-slate-700 mb-2 block">Preferred Region</label>
-            <select
-              value={selectedRegion}
-              onChange={(e) => setSelectedRegion(e.target.value)}
-              className="touch-target w-full bg-white border border-slate-300 text-slate-800 text-sm font-semibold rounded-xl p-3.5 focus:ring-2 focus:ring-google-green-500 focus:outline-none shadow-sm"
-            >
-              {REGIONS.map((r) => (
-                <option key={r.id} value={r.id}>{r.label}</option>
               ))}
             </select>
           </div>
