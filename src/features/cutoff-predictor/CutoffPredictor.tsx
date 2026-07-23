@@ -459,9 +459,6 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
                           {item.college.city}
                         </span>
                       </div>
-                      <div className="mt-1.5 text-xs text-slate-500">
-                        {item.college.status}
-                      </div>
                     </div>
 
                     <button
