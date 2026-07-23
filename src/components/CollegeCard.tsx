@@ -152,8 +152,8 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
             {displayedBranches.length > 0 ? (
               displayedBranches.map((br) => {
                 const c2025 = br.cutoffs2025[selectedCategory] || br.cutoffs2025['GOPENH'];
-                const c2024 = br.cutoffs2024[selectedCategory] || br.cutoffs2024['GOPENH'];
-                const diff = c2025.percentile - c2024.percentile;
+                //const c2024 = br.cutoffs2024[selectedCategory] || br.cutoffs2024['GOPENH'];
+                //const diff = c2025.percentile - c2024.percentile;
                 return (
                   <div key={br.code} className="bg-slate-50/70 border border-slate-200 rounded-xl p-3">
                     <div className="flex items-start justify-between gap-2">
@@ -193,9 +193,8 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
               <thead className="bg-slate-100 text-slate-700 font-semibold uppercase tracking-wider border-b border-slate-200">
                 <tr>
                   <th className="p-3">Branch Name</th>
-                  <th className="p-3 text-right">2025 Cutoff (%ile)</th>
-                  <th className="p-3 text-right">Approx State Rank</th>
-                  <th className="p-3 text-right">2024 Cutoff</th>
+                  <th className="p-3 text-center">2025 Cutoff (%ile)</th>
+                  <th className="p-3 text-center">Approx State Rank</th>
                   <th className="p-3 text-center">Intake</th>
                 </tr>
               </thead>
@@ -203,8 +202,8 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
                 {displayedBranches.length > 0 ? (
                   displayedBranches.map((br) => {
                     const c2025 = br.cutoffs2025[selectedCategory] || br.cutoffs2025['GOPENH'];
-                    const c2024 = br.cutoffs2024[selectedCategory] || br.cutoffs2024['GOPENH'];
-                    const diff = c2025.percentile - c2024.percentile;
+                    //const c2024 = br.cutoffs2024[selectedCategory] || br.cutoffs2024['GOPENH'];
+                    //const diff = c2025.percentile - c2024.percentile;
 
                     return (
                       <tr key={br.code} className="hover:bg-slate-50 transition-colors">
@@ -212,18 +211,13 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
                           <div>{br.name}</div>
                           <span className="text-[10px] text-slate-400 font-mono">Code: {br.code}</span>
                         </td>
-                        <td className="p-3 text-right font-bold text-google-blue-600 text-sm">
+                        <td className="p-3 text-center font-bold text-google-blue-600 text-sm">
                           {c2025.percentile.toFixed(2)}%
                         </td>
-                        <td className="p-3 text-right font-mono text-slate-600">
+                        <td className="p-3 text-center font-mono text-slate-600">
                           #{c2025.rank.toLocaleString()}
                         </td>
-                        <td className="p-3 text-right font-medium text-slate-500">
-                          {c2024.percentile.toFixed(2)}%
-                          <span className={`text-[10px] ml-1.5 font-bold ${diff >= 0 ? 'text-google-green-600' : 'text-google-red-500'}`}>
-                            ({diff >= 0 ? `+${diff.toFixed(2)}` : diff.toFixed(2)})
-                          </span>
-                        </td>
+                        
                         <td className="p-3 text-center text-slate-600">
                           {br.intake} seats
                         </td>

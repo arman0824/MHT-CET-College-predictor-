@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { School, Search, Target, GitCompare, TrendingUp, Sparkles, ShieldCheck, Menu } from 'lucide-react';
+import { School, Search, Target, GitCompare, TrendingUp, Sparkles, ShieldCheck, Menu, Download } from 'lucide-react';
 import { MobileSheet } from './MobileSheet';
 
 interface NavbarProps {
@@ -234,14 +234,13 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, compare
           })}
 
           <a
-            href="https://cetcell.mahacet.org"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="touch-target mt-3 w-full flex items-center justify-center gap-2 bg-slate-900 text-white text-sm font-semibold px-4 py-3 rounded-2xl shadow-sm"
-          >
-            <Sparkles className="w-4 h-4 text-google-yellow-500" />
-            Open CET Cell Portal ↗
-          </a>
+              href="/CAP-round-2025.pdf"
+              download="MHT-CET-CAP-ROUND-2025.pdf"
+              className="md:hidden mt-3 touch-target w-full inline-flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-semibold rounded-full"
+            >
+              <Download className="w-4 h-4" />
+              Download 2025 CUT-OFF PDF
+            </a>
 
           <p className="text-[12px] text-slate-500 text-center mt-2 flex items-center justify-center gap-1">
             <ShieldCheck className="w-3 h-3 text-google-green-600" />
