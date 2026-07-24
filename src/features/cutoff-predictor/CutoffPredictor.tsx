@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import type { College } from '../../shared/types/college';
 import { Target, Sparkles, CheckCircle, AlertCircle, BookmarkPlus, MapPin, Save } from 'lucide-react';
 import { calculatePredictions, type PredictionBucket } from './predictionUtils';
+import { ALL_CATEGORIES } from '../../shared/lib/college';
 
 interface CutoffPredictorProps {
   colleges: College[];
@@ -114,7 +115,7 @@ const loadPersisted = (): PersistedState | null => {
   }
 };
 
-const BUCKET_META: Record<PredictionBucket, { label: string; short: string; icon: React.ComponentType<{ className?: string }>; color: string; bgClass: string; borderClass: string; textClass: string; description: string }> = {
+const BUCKET_META: Record<PredictionBucket, { label: string; short: string; icon: React.ComponentType<{ className?: string }>; color: string; bgClass: string; borderClass: string; textClass: string; badgeBgClass: string; ringClass: string; description: string }> = {
   safe: {
     label: 'High Chance (Safe)',
     short: 'Safe',
@@ -123,6 +124,8 @@ const BUCKET_META: Record<PredictionBucket, { label: string; short: string; icon
     bgClass: 'bg-google-green-50',
     borderClass: 'border-google-green-500',
     textClass: 'text-google-green-700',
+    badgeBgClass: 'bg-google-green-500',
+    ringClass: 'ring-google-green-500/20',
     description: 'Cutoff ≤ your score. High admission probability in CAP Round 1.'
   },
   moderate: {
@@ -133,6 +136,8 @@ const BUCKET_META: Record<PredictionBucket, { label: string; short: string; icon
     bgClass: 'bg-amber-50',
     borderClass: 'border-amber-500',
     textClass: 'text-amber-700',
+    badgeBgClass: 'bg-amber-500',
+    ringClass: 'ring-amber-500/20',
     description: 'Cutoff up to 1.5% above your score. Competitive for CAP Round 2 & 3.'
   },
   dream: {
@@ -143,6 +148,8 @@ const BUCKET_META: Record<PredictionBucket, { label: string; short: string; icon
     bgClass: 'bg-google-blue-50',
     borderClass: 'border-google-blue-500',
     textClass: 'text-google-blue-700',
+    badgeBgClass: 'bg-google-blue-500',
+    ringClass: 'ring-google-blue-500/20',
     description: 'Cutoff 1.5%–3.5% above your score. Try CAP Round 3 or ACAP spots.'
   }
 };
@@ -206,7 +213,7 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
   const [userPercentile, setUserPercentile] = useState<number | string>(initial?.percentile ?? 95.0);
   const [userCategory, setUserCategory] = useState<string>(() => {
     if (initial?.category) return initial.category;
-    return 'GOPENH';
+    return ALL_CATEGORIES;
   });
   const [selectedRegion, ] = useState<string>(initial?.region ?? 'ALL');
   const [selectedBranch, setSelectedBranch] = useState<string>(initial?.branch ?? 'ALL');
@@ -215,6 +222,7 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
 
   // Keep userCategory synced with available categories if necessary
   useEffect(() => {
+    if (userCategory === ALL_CATEGORIES) return;
     if (categories.length > 0 && !categories.some((c) => c.id === userCategory)) {
       setUserCategory(categories[0].id);
     }
@@ -312,6 +320,7 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
               onChange={(e) => setUserCategory(e.target.value)}
               className="touch-target w-full bg-white border border-slate-300 text-slate-800 text-sm font-semibold rounded-xl p-3.5 focus:ring-2 focus:ring-google-green-500 focus:outline-none shadow-sm"
             >
+              <option value={ALL_CATEGORIES}>All Categories</option>
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>{c.label}</option>
               ))}
@@ -337,7 +346,7 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
           <div className="text-sm font-semibold text-slate-800 flex items-center gap-2 flex-wrap">
             <span>Calculated for:</span>
             <span className="bg-google-green-50 text-google-green-700 border border-google-green-200 px-3 py-1 rounded-full text-xs font-bold">
-              {userPercentile || 0}%ile • {userCategory}
+              {userPercentile || 0}%ile • {userCategory === ALL_CATEGORIES ? 'All Categories' : userCategory}
             </span>
           </div>
 
@@ -400,7 +409,7 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
               onClick={() => setActiveTab(key)}
               className={`p-5 rounded-2xl border text-left transition-all duration-200 relative overflow-hidden ${
                 active
-                  ? `${meta.bgClass} ${meta.borderClass} shadow-[0_4px_16px_rgba(0,0,0,0.08)] ring-2 ring-${meta.color}-500/20`
+                  ? `${meta.bgClass} ${meta.borderClass} shadow-[0_4px_16px_rgba(0,0,0,0.08)] ring-2 ${meta.ringClass}`
                   : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
               }`}
             >
@@ -409,7 +418,7 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
                   <Icon className={`w-5 h-5 ${meta.textClass}`} />
                   <span>{meta.label}</span>
                 </div>
-                <span className={`${meta.bgClass.replace('-50', '-500')} text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full`}>
+                <span className={`${meta.badgeBgClass} text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full`}>
                   {count}
                 </span>
               </div>
@@ -476,7 +485,9 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
                   {/* Bottom: clear metric row */}
                   <div className="mt-3 grid grid-cols-3 gap-2 sm:gap-3">
                     <div className="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 sm:px-3 sm:py-2.5">
-                      <div className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">Cutoff 2025 ({userCategory})</div>
+                      <div className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">
+                        Cutoff 2025 ({userCategory === ALL_CATEGORIES ? 'Best' : userCategory})
+                      </div>
                       <div className="mt-0.5 text-base sm:text-lg font-black text-slate-900">
                         {item.cutoffP.toFixed(2)}<span className="text-xs sm:text-sm font-bold text-slate-500">%ile</span>
                       </div>
@@ -506,7 +517,7 @@ export const CutoffPredictor: React.FC<CutoffPredictorProps> = ({
           </div>
         ) : (
           <div className="py-10 sm:py-12 text-center text-sm text-slate-400 font-medium">
-            No matching college branches found with cutoff data for <span className="font-bold text-slate-600">{userCategory}</span> in this probability bucket. Try adjusting your MHT-CET score, category, or branch preferences above.
+            No matching college branches found with cutoff data for <span className="font-bold text-slate-600">{userCategory === ALL_CATEGORIES ? 'All Categories' : userCategory}</span> in this probability bucket. Try adjusting your MHT-CET score, category, or branch preferences above.
           </div>
         )}
       </div>

@@ -1,4 +1,5 @@
 import type { College } from '../../shared/types/college';
+import { ALL_CATEGORIES, getBestCutoff } from '../../shared/lib/college';
 
 export type PredictionBucket = 'safe' | 'moderate' | 'dream';
 
@@ -36,7 +37,7 @@ export function calculatePredictions(
     college.branches.forEach((branch) => {
       if (branchFilter !== 'ALL' && !branch.name.toLowerCase().includes(branchFilter.toLowerCase())) return;
 
-      const cutoff = branch.cutoffs2025[category];
+      const cutoff = category === ALL_CATEGORIES ? getBestCutoff(branch) : branch.cutoffs2025[category];
       if (!cutoff || !Number.isFinite(cutoff.percentile) || !Number.isFinite(cutoff.rank)) return;
 
       const prediction = {

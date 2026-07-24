@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { College } from '../../shared/types/college';
 import { MapPin, Star, ChevronDown, ChevronUp, Plus, Check, Award, Flame } from 'lucide-react';
-import { findPreferredBranch, hasCategoryCutoff } from '../../shared/lib/college';
+import { findPreferredBranch, hasCategoryCutoff, ALL_CATEGORIES, getBestCutoff } from '../../shared/lib/college';
 
 interface CollegeCardProps {
   college: College;
@@ -21,9 +21,11 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
 
   const csBranch = findPreferredBranch(college, selectedCategory) ?? college.branches[0];
 
-  const topCutoff2025 = csBranch?.cutoffs2025?.[selectedCategory];
+  const topCutoff2025 = selectedCategory === ALL_CATEGORIES ? getBestCutoff(csBranch) : csBranch?.cutoffs2025?.[selectedCategory];
 
-  const availableBranches = college.branches.filter((branch) => hasCategoryCutoff(branch, selectedCategory));
+  const availableBranches = selectedCategory === ALL_CATEGORIES
+    ? college.branches.filter((branch) => hasCategoryCutoff(branch, ALL_CATEGORIES))
+    : college.branches.filter((branch) => hasCategoryCutoff(branch, selectedCategory));
   const displayedBranches = activeBranchFilter === 'ALL'
     ? availableBranches
     : availableBranches.filter(b => b.name.toLowerCase().includes(activeBranchFilter.toLowerCase()));
@@ -37,10 +39,7 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
           <span className="inline-flex items-center gap-1 bg-slate-900 text-white font-mono text-xs font-semibold px-2 py-1 rounded-lg shadow-sm">
             DTE: {college.code}
           </span>
-
-          <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-md">
-            Estd. {college.established}
-          </span>
+          
         </div>
 
         <div className="flex items-center gap-1 text-xs font-bold text-amber-700 bg-amber-50 px-2 py-1 rounded-lg border border-amber-200/60">
@@ -67,7 +66,7 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
             <Flame className="w-3.5 h-3.5 text-google-red-500 shrink-0" />
             <span className="truncate">Top Branch ({csBranch?.name.split(" ")[0]}):</span>
             <span className="bg-google-blue-100 text-google-blue-800 font-bold px-1.5 py-0.2 rounded text-[10px] shrink-0">
-              {selectedCategory}
+              {selectedCategory === ALL_CATEGORIES ? 'Best' : selectedCategory}
             </span>
           </div>
           <div className="flex items-baseline gap-2 mt-1 flex-wrap">
@@ -126,7 +125,7 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
           <div className="flex items-center gap-2 mb-3 sm:mb-4">
             <Award className="w-4 h-4 text-google-blue-500 shrink-0" />
             <h4 className="text-sm font-bold text-slate-900 leading-tight">
-              Branch-wise Cutoffs <span className="text-slate-500 font-medium">({selectedCategory})</span>
+              Branch-wise Cutoffs <span className="text-slate-500 font-medium">({selectedCategory === ALL_CATEGORIES ? 'All Categories — Best per Branch' : selectedCategory})</span>
             </h4>
           </div>
 
@@ -151,7 +150,7 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
           <div className="sm:hidden space-y-2">
             {displayedBranches.length > 0 ? (
               displayedBranches.map((br) => {
-                const c2025 = br.cutoffs2025[selectedCategory];
+                const c2025 = selectedCategory === ALL_CATEGORIES ? getBestCutoff(br) : br.cutoffs2025[selectedCategory];
                 if (!c2025) return null;
                 return (
                   <div key={br.code} className="bg-slate-50/70 border border-slate-200 rounded-xl p-3">
@@ -180,7 +179,7 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
               })
             ) : (
               <div className="p-4 text-center text-sm text-slate-400 italic">
-                No branches found with cutoff data for "{selectedCategory}" matching "{activeBranchFilter}".
+                No branches found with cutoff data for "{selectedCategory === ALL_CATEGORIES ? 'All Categories' : selectedCategory}" matching "{activeBranchFilter}".
               </div>
             )}
           </div>
@@ -199,7 +198,7 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
               <tbody className="divide-y divide-slate-200/80 bg-white">
                 {displayedBranches.length > 0 ? (
                   displayedBranches.map((br) => {
-                    const c2025 = br.cutoffs2025[selectedCategory];
+                    const c2025 = selectedCategory === ALL_CATEGORIES ? getBestCutoff(br) : br.cutoffs2025[selectedCategory];
                     if (!c2025) return null;
 
                     return (
@@ -223,7 +222,7 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({
                 ) : (
                   <tr>
                     <td colSpan={4} className="p-4 text-center text-slate-400 italic">
-                      No branches found with cutoff data for "{selectedCategory}" matching "{activeBranchFilter}".
+                      No branches found with cutoff data for "{selectedCategory === ALL_CATEGORIES ? 'All Categories' : selectedCategory}" matching "{activeBranchFilter}".
                     </td>
                   </tr>
                 )}

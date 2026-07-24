@@ -4,7 +4,7 @@ import { CollegeCard } from './CollegeCard';
 import { Search, SlidersHorizontal, RotateCcw, Filter, Check } from 'lucide-react';
 import { MobileSheet } from '../../shared/components/MobileSheet';
 import { Chip } from '../../shared/components/Chip';
-import { findPreferredBranch, hasCategoryCutoff } from '../../shared/lib/college';
+import { findPreferredBranch, hasCategoryCutoff, ALL_CATEGORIES, getBestCutoff } from '../../shared/lib/college';
 
 interface CollegeExplorerProps {
   colleges: College[];
@@ -166,9 +166,7 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
   const [selectedRegion, setSelectedRegion] = useState<string>('ALL');
   const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
   const [selectedBranch, setSelectedBranch] = useState<string>('ALL');
-  const [selectedCategory, setSelectedCategory] = useState<string>(() => {
-    return categories.some(c => c.id === 'GOPENH') ? 'GOPENH' : (categories[0]?.id || 'GOPENH');
-  });
+  const [selectedCategory, setSelectedCategory] = useState<string>(ALL_CATEGORIES);
   const [sortBy, setSortBy] = useState<'percentile_desc' | 'percentile_asc' | 'name' | 'rating'>('percentile_desc');
   const [minPercentile, setMinPercentile] = useState<number>(0);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -180,7 +178,7 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
     setSelectedRegion('ALL');
     setSelectedStatus('ALL');
     setSelectedBranch('ALL');
-    setSelectedCategory(categories.some(c => c.id === 'GOPENH') ? 'GOPENH' : (categories[0]?.id || 'GOPENH'));
+    setSelectedCategory(ALL_CATEGORIES);
     setSortBy('percentile_desc');
     setMinPercentile(0);
   };
@@ -189,7 +187,7 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
     (selectedRegion !== 'ALL' ? 1 : 0) +
     (selectedStatus !== 'ALL' ? 1 : 0) +
     (selectedBranch !== 'ALL' ? 1 : 0) +
-    (selectedCategory !== (categories.some(c => c.id === 'GOPENH') ? 'GOPENH' : (categories[0]?.id || 'GOPENH')) ? 1 : 0) +
+    (selectedCategory !== ALL_CATEGORIES ? 1 : 0) +
     (minPercentile > 0 ? 1 : 0);
 
   // Filter & Sort Logic - strictly requires exact category cutoff data
@@ -220,7 +218,7 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
         col.branches.some((branch) => branch.name.toLowerCase().includes(selectedBranch.toLowerCase()) && hasCategoryCutoff(branch, selectedCategory));
 
       const topBranch = findPreferredBranch(col, selectedCategory);
-      const p = topBranch?.cutoffs2025?.[selectedCategory]?.percentile || 0;
+      const p = getBestCutoff(topBranch)?.percentile || 0;
       const matchesPercentile = p >= minPercentile;
 
       return matchesSearch && matchesRegion && matchesStatus && matchesBranch && matchesPercentile;
@@ -228,8 +226,8 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
       const aTopBranch = findPreferredBranch(colA, selectedCategory);
       const bTopBranch = findPreferredBranch(colB, selectedCategory);
 
-      const aCutoff = aTopBranch?.cutoffs2025?.[selectedCategory]?.percentile || 0;
-      const bCutoff = bTopBranch?.cutoffs2025?.[selectedCategory]?.percentile || 0;
+      const aCutoff = getBestCutoff(aTopBranch)?.percentile || 0;
+      const bCutoff = getBestCutoff(bTopBranch)?.percentile || 0;
 
       if (sortBy === 'percentile_desc') return bCutoff - aCutoff;
       if (sortBy === 'percentile_asc') return aCutoff - bCutoff;
@@ -247,7 +245,9 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
 
   const statusLabel = STATUS_OPTIONS.find(s => s.id === selectedStatus)?.label || '';
   const branchLabel = BRANCH_OPTIONS.find(b => b.id === selectedBranch)?.label || '';
-  const categoryLabel = categories.find(c => c.id === selectedCategory)?.label?.split(' ')[0] || selectedCategory;
+  const categoryLabel = selectedCategory === ALL_CATEGORIES
+    ? 'All Categories'
+    : categories.find(c => c.id === selectedCategory)?.label?.split(' ')[0] || selectedCategory;
 
   const filterSheet = (
     <div className="space-y-5">
@@ -258,6 +258,7 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
           onChange={(e) => setSelectedCategory(e.target.value)}
           className="touch-target w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm font-semibold rounded-xl px-4 focus:bg-white focus:ring-2 focus:ring-google-blue-500 focus:outline-none"
         >
+          <option value={ALL_CATEGORIES}>All Categories</option>
           {categories.map((cat) => (
             <option key={cat.id} value={cat.id}>{cat.label}</option>
           ))}
@@ -321,7 +322,7 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
     </div>
   );
 
-  const defaultCatId = categories.some(c => c.id === 'GOPENH') ? 'GOPENH' : (categories[0]?.id || 'GOPENH');
+  const defaultCatId = ALL_CATEGORIES;
 
   return (
     <div className="space-y-6 sm:space-y-8 py-4 sm:py-6">
@@ -333,7 +334,7 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
             Explore <span className="text-google-blue-500">Maharashtra</span> Engineering Cutoffs
           </h1>
           <p className="text-sm text-slate-500 mt-2">
-            Some Colleges May NOT show-up based on the selected Resevation Category. In the FILTERS tab Make sure it matches your preference.
+            Browse all Maharashtra engineering colleges. Filter by category, region, branch, or minimum percentile to narrow down.
           </p>
         </div>
 
@@ -428,6 +429,7 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl p-2.5 focus:bg-white focus:ring-2 focus:ring-google-blue-500 focus:outline-none"
             >
+              <option value={ALL_CATEGORIES}>All Categories</option>
               {categories.map((cat) => (
                 <option key={cat.id} value={cat.id}>{cat.label}</option>
               ))}
@@ -497,7 +499,7 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
           Showing <span className="font-bold text-slate-900">{visibleColleges.length}</span> of <span className="font-bold text-slate-900">{filteredColleges.length}</span> colleges matching criteria
         </div>
         <div className="text-xs text-slate-500 font-medium hidden sm:block">
-          Active Category: <span className="font-bold text-google-blue-600 bg-google-blue-50 px-2 py-0.5 rounded border border-google-blue-100">{selectedCategory}</span>
+          Active Category: <span className="font-bold text-google-blue-600 bg-google-blue-50 px-2 py-0.5 rounded border border-google-blue-100">{categoryLabel}</span>
         </div>
       </div>
 
@@ -524,7 +526,7 @@ export const CollegeExplorer: React.FC<CollegeExplorerProps> = ({
           </div>
           <h3 className="text-lg font-bold text-slate-800">No Colleges Found</h3>
           <p className="text-sm text-slate-500 mt-2">
-            No engineering colleges matched your search parameters with cutoff data for <span className="font-bold text-slate-700">{selectedCategory}</span>. Try adjusting your category, minimum percentile, or region filters above.
+            No engineering colleges matched your search parameters with cutoff data for <span className="font-bold text-slate-700">{categoryLabel}</span>. Try adjusting your category, minimum percentile, or region filters above.
           </p>
           <button
             onClick={handleResetFilters}
